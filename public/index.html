@@ -242,6 +242,11 @@ details summary{cursor:pointer;color:var(--muted);font-size:12.5px;font-weight:5
   --app-sh:0 20px 60px rgba(0,0,0,.5);
   --drawer-sh:0 18px 50px rgba(0,0,0,.5);
 }
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px;margin-top:7px}
+.fl{display:block}
+.fl>span{display:block;font-size:11.5px;color:var(--muted);margin-bottom:3px}
+.fl input{width:100%}
+.fl>div{font-size:13px;word-break:break-word}
 [data-theme=dark] .kpi::after{opacity:.22}
 [data-theme=dark] .chip:hover{color:var(--ink)}
 [data-theme=dark] .btn:hover{color:var(--violet)}
@@ -1857,98 +1862,182 @@ function bindDrawer(it) {
   };
 }
 
+const SELF_FORM = [
+  ["Identity", [["supplierCode", "Supplier code"], ["companyName", "Company name"], ["partNo", "Part number"], ["partName", "Part name"],
+                ["eciNo", "Latest ECI no."], ["idVersion", "ID / Version"], ["submissionDate", "Submission date"]]],
+  ["Mass", [["massA", "(A) Mass (gr)"], ["massB", "(B) Total mass (gr)"], ["massDev", "Mass deviation (A-B)"],
+            ["drawingMass", "Drawing mass (gr)"], ["actualMass", "Actual mass (gr)"], ["massClass", "Mass tolerance class"]]],
+  ["Material & substance", [["materialName", "Material name"], ["materialContent", "Substance content (% wt)"], ["applicationId", "Correct application ID"],
+                            ["substanceName", "Substance name"], ["cas", "CAS no."], ["substanceContent", "Substance content (%)"], ["purpose", "Purpose of use"]]],
+  ["Remarks", [["materialRemarks", "Supplier remarks"], ["explanation", "Supplier explanation"]]],
+];
+
 function viewSelfCheck() {
-  const all = selfCheckRows();
-  const q = (UI.selfQ || "").toLowerCase();
-  const rows = all.filter((r) => !q || [r.supplierCode, r.companyName, r.partNo, r.partName, r.cas, r.substanceName, r.materialName, r.eciNo].some((v) => String(v ?? "").toLowerCase().includes(q)));
-  const bySup = {};
-  for (const r of all) { const k = `${r.supplierCode || "—"}|${r.companyName || ""}`; (bySup[k] ||= []).push(r); }
+  const lib = selfLibrary();
+  const q = (UI.selfQ || "").trim().toLowerCase();
+  const shown = lib.filter((e) => libraryMatches(e, q))
+    .sort((a, b) => String(a.latest.supplierCode || "").localeCompare(String(b.latest.supplierCode || "")) || String(a.latest.partNo || "").localeCompare(String(b.latest.partNo || "")));
   const subs = S.selfChecks || [];
-  $("#main").innerHTML = header("SUPPLIER / SELF-CHECK", "Supplier Self-Check Form Summary",
-    "Everything suppliers have submitted on their IMDS Material Self-Check Sheets, in one place — so you can check what is already known before asking them again.") + `
+  const suppliers = new Set(lib.map((e) => e.latest.supplierCode).filter(Boolean));
+  const versions = lib.reduce((n, e) => n + e.versions.length, 0);
+  const lastUpd = subs.length ? subs.map((s) => s.importedAt).sort().slice(-1)[0] : null;
+  const linked = ITEMS.filter((i) => selfChecksForPart(i.record.deliveryPartNo).length).length;
+  const openKey = UI.selfOpen;
+
+  $("#main").innerHTML = header("SUPPLIER / SELF-CHECK", "Supplier Self-Check Library",
+    "Everything suppliers have ever told you, kept in one place. Import a sheet or type an entry — it stays here, so next time you can look it up instead of asking again.") + `
   <div class="kpis">
-    <button class="kpi b"><span>Self-check lines</span><b>${all.length}</b><em>across ${subs.length} submitted sheet${subs.length === 1 ? "" : "s"}</em></button>
-    <button class="kpi p"><span>Suppliers covered</span><b>${Object.keys(bySup).length}</b><em>with at least one line</em></button>
-    <button class="kpi"><span>Part numbers covered</span><b>${new Set(all.map((r) => r.partKeyNorm).filter(Boolean)).size}</b><em>matched against the register by part no.</em></button>
-    <button class="kpi g"><span>Register cases with self-check data</span><b>${ITEMS.filter((i) => selfChecksForPart(i.record.deliveryPartNo).length).length}</b><em>of ${ITEMS.length} cases</em></button>
+    <button class="kpi b"><span>Parts in the library</span><b>${lib.length}</b><em>${versions} entr${versions === 1 ? "y" : "ies"} in total</em></button>
+    <button class="kpi p"><span>Suppliers</span><b>${suppliers.size}</b><em>${subs.length} submission${subs.length === 1 ? "" : "s"} kept</em></button>
+    <button class="kpi g"><span>Register cases covered</span><b>${linked}</b><em>of ${ITEMS.length} open cases</em></button>
+    <button class="kpi"><span>Last updated</span><b style="font-size:19px">${lastUpd ? esc(lastUpd.slice(0, 10)) : "—"}</b><em>${lastUpd ? esc(lastUpd.slice(11, 16)) : "nothing yet"}</em></button>
   </div>
-  <div class="card w"><div class="tools">
-      <input type="search" id="selfq" placeholder="Supplier name, supplier code, part number, CAS…" value="${esc(UI.selfQ || "")}">
-      <input type="file" id="self-file" accept=".xlsx">
-      <button class="btn" id="self-clear">Remove all sheets</button>
+
+  <div class="card w">
+    <div class="tools">
+      <input type="search" id="selfq" placeholder="Search part name, part number, company, supplier code, CAS…" value="${esc(UI.selfQ || "")}">
+      <button class="btn pri" id="self-add">+ Add entry</button>
+      <button class="btn" id="self-import">⬆ Import sheet</button>
+      <input type="file" id="self-file" accept=".xlsx" hidden>
+      <button class="btn" id="self-xlsx">⬇ Excel</button>
+      <button class="btn" id="self-backup">⬇ Backup</button>
+      <button class="btn" id="self-restore">⬆ Restore</button>
+      <input type="file" id="self-restore-file" accept=".json" hidden>
     </div>
     <div class="sc-switches">
       <label><input type="checkbox" id="sw-use" ${rule("selfCheckUse") ? "checked" : ""}> Use self-check answers in the Judgment Workspace</label>
       <label><input type="checkbox" id="sw-auto" ${rule("selfCheckAuto") ? "checked" : ""} ${rule("selfCheckUse") ? "" : "disabled"}> Judge OK automatically when the supplier's answer leads to OK</label>
     </div>
-    <div class="small" style="margin-top:8px">Import the supplier's <b>Request for Supplier IMDS Material Self-Check Sheet</b> (.xlsx). The IMDS Information Form sheet and the contact people are read; nothing is sent anywhere.</div>
+    <div class="small" style="margin-top:8px">${q ? `${shown.length} of ${lib.length} parts match “${esc(UI.selfQ)}”` : `Everything is saved in this browser. Use <b>Backup</b> to keep a copy you can restore later or give to a colleague.`}</div>
     <div id="self-msg"></div>
   </div>
-  ${subs.length ? `<div class="card" style="margin-top:14px"><h3>Submitted sheets</h3><p class="hint">Most recent first.</p>
-    <table><thead><tr><th>Supplier</th><th>File</th><th>Lines</th><th>Contacts</th><th>Submitted</th><th>Imported</th><th></th></tr></thead><tbody>
-    ${subs.slice().reverse().map((s, i) => `<tr><td><b>${esc(s.supplierCode || "—")}</b><div class="small">${esc(s.companyName || "")}</div></td>
-      <td class="small">${esc(s.file)}</td><td>${s.rows.length}</td><td class="small">${s.contacts.map((c) => esc(c.name || c.role || "")).filter(Boolean).join(", ") || "—"}</td>
-      <td class="mono small">${esc(s.submittedDate || "—")}</td><td class="mono small">${esc(s.importedAt.replace("T", " ").slice(0, 16))}</td>
+
+  ${UI.selfForm ? `<div class="card w" style="margin-top:14px"><h3>${UI.selfForm.editing ? "Edit entry" : "Add a self-check entry"}</h3>
+    <p class="hint">Only a supplier code or a part number is required. Everything else is optional — fill in what the supplier gave you.</p>
+    ${SELF_FORM.map(([sec, fields]) => `<div style="margin-top:12px"><b class="small" style="color:var(--brand2)">${esc(sec.toUpperCase())}</b>
+      <div class="formgrid">${fields.map(([k, label]) => `<label class="fl"><span>${esc(label)}</span><input class="btn" data-f="${k}" value="${esc(UI.selfForm.rec[k] || "")}" ${k === "submissionDate" ? 'placeholder="YYYY-MM-DD"' : ""}></label>`).join("")}</div></div>`).join("")}
+    <div class="tools" style="margin-top:14px"><button class="btn pri" id="self-save">Save to library</button><button class="btn" id="self-cancel">Cancel</button></div>
+  </div>` : ""}
+
+  ${lib.length ? `<div class="card w" style="margin-top:14px">
+    <div class="tablebox" style="max-height:none;padding:0">
+    <table><thead><tr><th>Supplier</th><th>Part number</th><th>Part name</th><th>Mass class</th><th>Substance / CAS</th><th>Submitted</th><th>Versions</th><th>In register</th></tr></thead><tbody>
+    ${shown.map((e) => { const v = e.latest, id = e.key.replace(/[^a-z0-9]/gi, "");
+      const hits = ITEMS.filter((i) => String(i.record.deliveryPartNo || "").replace(/[^0-9a-z]/gi, "").toUpperCase() === v.partKeyNorm);
+      return `<tr class="row" data-open="${esc(e.key)}">
+        <td><b class="mono">${esc(v.supplierCode || "—")}</b><div class="small">${esc((v.companyName || "").slice(0, 26))}</div></td>
+        <td class="mono">${esc(v.partNo || "—")}</td>
+        <td class="small">${esc((v.partName || "").slice(0, 30))}</td>
+        <td>${v.massClass ? `<span class="tag t-route">${esc(v.massClass)}</span>` : "—"}</td>
+        <td class="small">${esc((v.substanceName || "").slice(0, 24))}${v.cas ? `<div class="mono">${esc(v.cas)}</div>` : ""}</td>
+        <td class="mono small">${esc(v._sub.submittedDate || v.submissionDate || v._sub.importedAt.slice(0, 10))}</td>
+        <td>${e.versions.length > 1 ? `<span class="tag t-rev">${e.versions.length}</span>` : `<span class="small">1</span>`}</td>
+        <td>${hits.length ? `<button class="btn" data-goreg="${esc(hits[0].key)}" style="padding:2px 8px">${hits.length} case${hits.length > 1 ? "s" : ""}</button>` : `<span class="small">—</span>`}</td></tr>
+      ${openKey === e.key ? `<tr><td colspan="8" style="background:var(--soft)">
+        <div class="formgrid" style="margin:4px 0 10px">${SELF_FORM.flatMap(([, fs]) => fs).filter(([k]) => v[k]).map(([k, label]) => `<div class="fl"><span>${esc(label)}</span><div>${esc(v[k])}</div></div>`).join("")}</div>
+        ${e.versions.length > 1 ? `<div class="small"><b>Earlier entries:</b> ${e.versions.slice(1).map((o) => esc(`${o._sub.submittedDate || o._sub.importedAt.slice(0, 10)} (${o._sub.file})`)).join(" · ")}</div>` : ""}
+        <div class="tools" style="margin-top:10px"><button class="btn" data-edit="${esc(e.key)}">Add updated entry</button><button class="btn" data-del="${esc(e.key)}">Remove this entry</button></div>
+      </td></tr>` : ""}`; }).join("")}
+    </tbody></table></div>
+    ${shown.length === 0 ? `<p class="small" style="padding:14px">Nothing matches “${esc(UI.selfQ)}”. Try a shorter search — part numbers match on digits and letters only.</p>` : ""}
+  </div>` : `<div class="card empty" style="margin-top:14px"><div class="big">${ICO.inn}</div><h3>The library is empty</h3>
+    <p>Import a supplier's IMDS Material Self-Check Sheet, or type an entry by hand. Everything you add stays here and builds up over time, so you can look a part up instead of e-mailing the supplier again.</p></div>`}
+
+  ${subs.length ? `<div class="card" style="margin-top:14px"><h3>Where the entries came from</h3>
+    <table><thead><tr><th>Source</th><th>Supplier</th><th>Entries</th><th>Added</th><th></th></tr></thead><tbody>
+    ${subs.slice().reverse().map((s) => `<tr><td class="small">${s.source === "manual" ? `<span class="tag t-rev">Typed in</span> ` : ""}${esc(s.file)}</td>
+      <td class="mono small">${esc(s.supplierCode || "—")}<div class="small">${esc((s.companyName || "").slice(0, 24))}</div></td>
+      <td>${s.rows.length}</td><td class="mono small">${esc(s.importedAt.replace("T", " ").slice(0, 16))}</td>
       <td><button class="btn" data-rmself="${esc(s.id)}">Remove</button></td></tr>`).join("")}
-    </tbody></table></div>` : ""}
-  <div class="card w" style="margin-top:14px"><h3>Self-check lines ${rows.length !== all.length ? `· ${rows.length} of ${all.length}` : `· ${all.length}`}</h3>
-    ${all.length ? `<div class="tablebox" style="max-height:none"><table><thead><tr>
-      <th>Supplier</th><th>Part number</th><th>Part name</th><th>Mass class</th><th>Masses (A/B)</th><th>Material</th><th>Substance / CAS</th><th>App ID</th><th>Purpose &amp; remarks</th><th>In register</th></tr></thead><tbody>
-      ${rows.map((r) => { const hits = ITEMS.filter((i) => String(i.record.deliveryPartNo || "").replace(/[^0-9a-z]/gi, "").toUpperCase() === r.partKeyNorm);
-        return `<tr><td><b class="mono">${esc(r.supplierCode || "—")}</b><div class="small">${esc(r.companyName || "")}</div></td>
-        <td class="mono">${esc(r.partNo || "—")}</td><td class="small">${esc(r.partName || "")}</td>
-        <td>${r.massClass ? `<span class="tag t-route">${esc(r.massClass)}</span>` : "—"}</td>
-        <td class="mono small">${esc(r.massA || "—")} / ${esc(r.massB || "—")}</td>
-        <td class="small">${esc(r.materialName || "—")}</td>
-        <td class="small">${esc(r.substanceName || "—")}${r.cas ? `<div class="mono">${esc(r.cas)}${r.substanceContent ? " · " + esc(r.substanceContent) + "%" : ""}</div>` : ""}</td>
-        <td class="mono">${esc(r.applicationId || "—")}</td>
-        <td class="small">${esc(r.purpose || "")}${r.explanation ? `<div>${esc(r.explanation)}</div>` : ""}${r.materialRemarks ? `<div>${esc(r.materialRemarks)}</div>` : ""}</td>
-        <td>${hits.length ? `<button class="btn" data-goreg="${esc(hits[0].key)}">${hits.length} case${hits.length > 1 ? "s" : ""}</button>` : `<span class="small">—</span>`}</td></tr>`; }).join("")}
-    </tbody></table></div>` : `<div class="empty"><div class="big"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/><path d="M8 12l2 2 4-4"/></svg></div>
-      <h3>No self-check sheets yet</h3><p>Import a supplier's IMDS Material Self-Check Sheet above. Once it is in, every matching case in the Judgment Workspace shows what the supplier already told you.</p></div>`}
-  ${Object.keys(bySup).length ? `<div class="card" style="margin-top:14px"><h3>Contact people</h3><p class="hint">From the Contact Person sheet of each submission.</p>
-    <table><thead><tr><th>Supplier</th><th>Role</th><th>Name</th><th>Division</th><th>Email</th><th>Phone / WA</th></tr></thead><tbody>
-    ${subs.flatMap((s) => s.contacts.map((c) => `<tr><td class="mono">${esc(s.supplierCode || "—")}<div class="small">${esc(s.companyName || "")}</div></td><td>${esc(c.role || "")}</td><td>${esc(c.name || "")}</td><td class="small">${esc(c.division || "")}</td><td class="small">${esc(c.email || "")}</td><td class="mono small">${esc(c.phone || "")}</td></tr>`)).join("") || `<tr><td colspan="6" class="small">No contact people in the imported sheets.</td></tr>`}
     </tbody></table></div>` : ""}`;
 
-  $("#selfq").oninput = (ev) => { UI.selfQ = ev.target.value; const p = ev.target.selectionStart; render(); const el = $("#selfq"); el.focus(); el.setSelectionRange(p, p); };
+  // ---- wiring ----
+  const el = $("#selfq");
+  el.oninput = (ev) => { UI.selfQ = ev.target.value; const p = ev.target.selectionStart; render(); const n = $("#selfq"); n.focus(); n.setSelectionRange(p, p); };
+  document.querySelectorAll("tr.row[data-open]").forEach((tr) => (tr.onclick = (ev) => { if (ev.target.closest("button")) return; UI.selfOpen = UI.selfOpen === tr.dataset.open ? null : tr.dataset.open; render(); }));
+  document.querySelectorAll("[data-goreg]").forEach((b) => (b.onclick = () => { UI.view = "register"; UI.sel = b.dataset.goreg; UI.status = ""; UI.cat = "All"; render(); }));
+  $("#self-add").onclick = () => { UI.selfForm = { rec: {}, editing: false }; render(); };
+  document.querySelectorAll("[data-edit]").forEach((b) => (b.onclick = () => {
+    const e = lib.find((x) => x.key === b.dataset.edit);
+    const rec = {}; SELF_FORM.flatMap(([, fs]) => fs).forEach(([k]) => (rec[k] = e.latest[k] || ""));
+    rec.submissionDate = ""; UI.selfForm = { rec, editing: true }; render();
+  }));
+  const form = $("#self-save");
+  if (form) {
+    form.onclick = () => {
+      const rec = {}; document.querySelectorAll("[data-f]").forEach((inp) => (rec[inp.dataset.f] = inp.value.trim() || null));
+      try { addManualSelfCheck(rec); UI.selfForm = null; evaluateAndAutoJudge(); save(); toast("Saved to the library"); render(); }
+      catch (e) { toast(e.message); }
+    };
+    $("#self-cancel").onclick = () => { UI.selfForm = null; render(); };
+  }
+  document.querySelectorAll("[data-del]").forEach((b) => (b.onclick = () => {
+    const e = lib.find((x) => x.key === b.dataset.del); if (!e) return;
+    if (!confirm(`Remove ${e.latest.partNo || e.latest.supplierCode} from the library? Its ${e.versions.length} entr${e.versions.length === 1 ? "y" : "ies"} will be deleted.`)) return;
+    const ids = new Set(e.versions.map((v) => v._sub.id));
+    for (const s of S.selfChecks) if (ids.has(s.id)) s.rows = s.rows.filter((r) => `${String(r.supplierCode || "").trim().toUpperCase()}|${r.partKeyNorm}` !== e.key);
+    S.selfChecks = S.selfChecks.filter((s) => s.rows.length);
+    S.audit.push({ at: new Date().toISOString(), ...user(), action: "SELFCHECK_REMOVE", detail: `${e.latest.partNo || e.latest.supplierCode} removed from the library` });
+    evaluateAndAutoJudge(); save(); UI.selfOpen = null; render();
+  }));
+  document.querySelectorAll("[data-rmself]").forEach((b) => (b.onclick = () => {
+    const sub = (S.selfChecks || []).find((s) => s.id === b.dataset.rmself);
+    if (sub && !confirm(`Remove "${sub.file}" and its ${sub.rows.length} entr${sub.rows.length === 1 ? "y" : "ies"}?`)) return;
+    S.selfChecks = (S.selfChecks || []).filter((s) => s.id !== b.dataset.rmself);
+    S.audit.push({ at: new Date().toISOString(), ...user(), action: "SELFCHECK_REMOVE", detail: sub ? sub.file : b.dataset.rmself });
+    evaluateAndAutoJudge(); save(); render();
+  }));
+
+  $("#self-import").onclick = () => $("#self-file").click();
   $("#self-file").onchange = async (ev) => {
     const file = ev.target.files[0]; if (!file) return;
     const msg = $("#self-msg");
     msg.innerHTML = `<div class="small" style="margin-top:8px">Reading ${esc(file.name)} …</div>`;
     try {
       const buf = await file.arrayBuffer();
-      const form = await readXlsx(buf, { sheet: (n) => /information\s*form/i.test(n), sheetError: 'No "IMDS Information Form" sheet in this workbook' });
-      const rows = parseSelfCheckForm(form);
-      if (!rows.length) throw new Error("No supplier lines filled in on the IMDS Information Form sheet");
+      const formRows = await readXlsx(buf, { sheet: (n) => /information\s*form/i.test(n), sheetError: 'No "IMDS Information Form" sheet in this workbook' });
+      const rows = parseSelfCheckForm(formRows);
+      if (!rows.length) throw new Error("No supplier lines filled in on the IMDS Information Form sheet — only the EXAMPLE row, which is skipped");
       let contacts = [];
       try { contacts = parseContacts(await readXlsx(buf, { sheet: (n) => /contact/i.test(n) })); } catch (e) {}
-      const sub = {
-        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, file: file.name, importedAt: new Date().toISOString(),
-        supplierCode: rows[0].supplierCode || "", companyName: rows[0].companyName || "",
-        submittedDate: rows.map((r) => r.submissionDate).find(Boolean) || "", rows, contacts,
-      };
-      S.selfChecks.push(sub);
-      S.audit.push({ at: new Date().toISOString(), ...user(), action: "SELFCHECK_IMPORT", detail: `${file.name}: ${rows.length} lines, ${contacts.length} contacts (${sub.supplierCode} ${sub.companyName})` });
-      const judged = (save(), evaluateAndAutoJudge(), 0); const sc = ITEMS.filter((i) => i.evaluation.trace.some((t) => t.viaSelfCheck)).length;
-      save(); toast(`${rows.length} self-check line${rows.length === 1 ? "" : "s"} imported · ${sc} case${sc === 1 ? "" : "s"} answered from the sheet`); render();
+      S.selfChecks.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, file: file.name, source: "import",
+        importedAt: new Date().toISOString(), supplierCode: rows[0].supplierCode || "", companyName: rows[0].companyName || "",
+        submittedDate: rows.map((r) => r.submissionDate).find(Boolean) || "", rows, contacts });
+      S.audit.push({ at: new Date().toISOString(), ...user(), action: "SELFCHECK_IMPORT", detail: `${file.name}: ${rows.length} lines, ${contacts.length} contacts` });
+      evaluateAndAutoJudge();
+      const sc = ITEMS.filter((i) => i.evaluation.trace.some((t) => t.viaSelfCheck)).length;
+      save(); toast(`${rows.length} entr${rows.length === 1 ? "y" : "ies"} added to the library · ${sc} case${sc === 1 ? "" : "s"} answered from supplier sheets`); render();
     } catch (e) { msg.innerHTML = `<div class="box rec-ng" style="margin-top:8px">${esc(e.message)}</div>`; }
   };
-  document.querySelectorAll("[data-rmself]").forEach((b) => (b.onclick = () => {
-    const id = b.dataset.rmself, sub = (S.selfChecks || []).find((s) => s.id === id);
-    S.selfChecks = (S.selfChecks || []).filter((s) => s.id !== id);
-    S.audit.push({ at: new Date().toISOString(), ...user(), action: "SELFCHECK_REMOVE", detail: sub ? sub.file : id });
-    evaluateAndAutoJudge();
-    save(); render();
-  }));
-  document.querySelectorAll("[data-goreg]").forEach((b) => (b.onclick = () => { UI.view = "register"; UI.sel = b.dataset.goreg; UI.status = ""; UI.cat = "All"; render(); }));
   const swUse = $("#sw-use"), swAuto = $("#sw-auto");
   if (swUse) swUse.onchange = () => { S.settings.selfCheckUse = swUse.checked; S.audit.push({ at: new Date().toISOString(), ...user(), action: "RULE_CHANGE", detail: `selfCheckUse = ${swUse.checked}` }); save(); evaluateAndAutoJudge(); render(); };
   if (swAuto) swAuto.onchange = () => { S.settings.selfCheckAuto = swAuto.checked; S.audit.push({ at: new Date().toISOString(), ...user(), action: "RULE_CHANGE", detail: `selfCheckAuto = ${swAuto.checked}` }); save(); evaluateAndAutoJudge(); render(); };
-  $("#self-clear").onclick = () => {
-    if (!(S.selfChecks || []).length) return toast("Nothing to remove");
-    if (!confirm(`Remove all ${S.selfChecks.length} imported self-check sheet(s)?`)) return;
-    S.selfChecks = []; S.audit.push({ at: new Date().toISOString(), ...user(), action: "SELFCHECK_REMOVE", detail: "all sheets" }); evaluateAndAutoJudge(); save(); render();
+  $("#self-xlsx").onclick = async () => {
+    if (!lib.length) return toast("The library is empty");
+    const fields = SELF_FORM.flatMap(([, fs]) => fs);
+    const rows = [[{ v: `Supplier Self-Check Library · ${lib.length} parts · exported ${today}`, s: S_TITLE }],
+      [...fields.map(([, l]) => ({ v: l, s: S_HEAD })), { v: "Source", s: S_HEAD }, { v: "Added", s: S_HEAD }, { v: "Versions", s: S_HEAD }],
+      ...shown.map((e) => [...fields.map(([k]) => ({ v: e.latest[k] || "", s: 3 })), { v: e.latest._sub.file, s: 3 }, { v: e.latest._sub.importedAt.slice(0, 16).replace("T", " "), s: 3 }, { v: e.versions.length, t: "n", s: 3 }])];
+    const blob = await workbook([{ name: "Self-check library", rows, widths: [...fields.map(() => 18), 28, 18, 9], freeze: 2 }]);
+    await saveFile(`TMMIN_supplier_selfcheck_library_${today}.xlsx`, blob, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    S.audit.push({ at: new Date().toISOString(), ...user(), action: "EXPORT", detail: `Self-check library: ${shown.length} parts` }); save();
+    toast("Library exported");
+  };
+  $("#self-backup").onclick = async () => {
+    if (!subs.length) return toast("Nothing to back up yet");
+    await saveFile(`gcats_selfcheck_library_backup_${today}.json`, new Blob([selfLibraryBackup()], { type: "application/json" }), "application/json");
+    toast("Backup saved — keep it somewhere safe");
+  };
+  $("#self-restore").onclick = () => $("#self-restore-file").click();
+  $("#self-restore-file").onchange = async (ev) => {
+    const file = ev.target.files[0]; if (!file) return;
+    try {
+      const text = await file.text();
+      const mode = subs.length ? (confirm(`You already have ${subs.length} submission(s).\n\nOK = merge the backup into them\nCancel = replace everything with the backup`) ? "merge" : "replace") : "merge";
+      const n = restoreSelfLibrary(text, mode);
+      evaluateAndAutoJudge(); save();
+      toast(`${n} submission(s) ${mode === "replace" ? "restored" : "merged"}`); render();
+    } catch (e) { $("#self-msg").innerHTML = `<div class="box rec-ng" style="margin-top:8px">${esc(e.message)}</div>`; }
   };
 }
 
@@ -2438,6 +2527,59 @@ function selfCheckRows() {
   for (const sub of S.selfChecks || []) for (const r of sub.rows) out.push({ ...r, _sub: sub });
   return out;
 }
+/** The library: one entry per supplier + part number, newest submission first, older ones kept
+ *  as versions. Re-importing a sheet therefore updates a part rather than duplicating it. */
+function selfLibrary() {
+  const lib = new Map();
+  for (const sub of S.selfChecks || []) {
+    for (const r of sub.rows) {
+      const k = `${String(r.supplierCode || "").trim().toUpperCase()}|${r.partKeyNorm || String(r.partNo || "").toUpperCase()}`;
+      if (!lib.has(k)) lib.set(k, { key: k, versions: [] });
+      lib.get(k).versions.push({ ...r, _sub: sub });
+    }
+  }
+  const when = (v) => v._sub.submittedDate || v.submissionDate || v._sub.importedAt || "";
+  for (const e of lib.values()) {
+    e.versions.sort((a, b) => String(when(b)).localeCompare(String(when(a))) || String(b._sub.importedAt).localeCompare(String(a._sub.importedAt)));
+    e.latest = e.versions[0];
+    e.updatedAt = e.versions[0]._sub.importedAt;
+  }
+  return [...lib.values()];
+}
+function libraryMatches(e, q) {
+  if (!q) return true;
+  const v = e.latest;
+  return [v.supplierCode, v.companyName, v.partNo, v.partName, v.cas, v.substanceName, v.materialName, v.eciNo, v.idVersion, v.applicationId, v.purpose]
+    .some((x) => String(x ?? "").toLowerCase().includes(q));
+}
+/** Save a typed-in entry. It joins the same library as imported sheets. */
+function addManualSelfCheck(rec) {
+  if (!rec.supplierCode && !rec.partNo) throw new Error("Give at least a supplier code or a part number");
+  rec.partKeyNorm = String(rec.partNo || "").replace(/[^0-9a-z]/gi, "").toUpperCase();
+  const u = user();
+  S.selfChecks.push({
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, file: `Typed in by ${u.user}`, source: "manual",
+    importedAt: new Date().toISOString(), supplierCode: rec.supplierCode || "", companyName: rec.companyName || "",
+    submittedDate: rec.submissionDate || "", rows: [rec], contacts: [],
+  });
+  S.audit.push({ at: new Date().toISOString(), ...u, action: "SELFCHECK_ADD", detail: `${rec.supplierCode || "—"} ${rec.partNo || "—"} typed in` });
+  save();
+}
+/** A JSON backup of the whole library — the register's own data is not included. */
+function selfLibraryBackup() {
+  return JSON.stringify({ kind: "gcats-selfcheck-library", version: 1, exportedAt: new Date().toISOString(), submissions: S.selfChecks || [] }, null, 1);
+}
+function restoreSelfLibrary(text, mode) {
+  const d = JSON.parse(text);
+  if (!d || d.kind !== "gcats-selfcheck-library" || !Array.isArray(d.submissions)) throw new Error("Not a self-check library backup file");
+  const existing = new Set((S.selfChecks || []).map((s) => s.id));
+  const incoming = d.submissions.filter((s) => s && Array.isArray(s.rows));
+  if (mode === "replace") S.selfChecks = incoming;
+  else S.selfChecks = [...(S.selfChecks || []), ...incoming.filter((s) => !existing.has(s.id))];
+  S.audit.push({ at: new Date().toISOString(), ...user(), action: "SELFCHECK_RESTORE", detail: `${incoming.length} submission(s) ${mode === "replace" ? "replaced" : "merged"} from backup` });
+  save();
+  return incoming.length;
+}
 
 
 /** What a supplier's self-check sheet already tells us, expressed as an answer to one of the
@@ -2456,6 +2598,10 @@ const scCas = (v) => String(v || "").replace(/[^0-9]/g, "");
 function selfCheckSuggest(r, node) {
   let lines = selfChecksForPart(r.deliveryPartNo).filter((x) => !x.supplierCode || !r.supplierCode || String(x.supplierCode).trim() === String(r.supplierCode).trim());
   if (!lines.length) return null;
+  // the library keeps older versions of a part; only the newest submission counts
+  const when = (x) => String(x._sub.submittedDate || x.submissionDate || x._sub.importedAt || "");
+  const newest = lines.reduce((a, x) => (when(x) > when(a) || (when(x) === when(a) && String(x._sub.importedAt) > String(a._sub.importedAt)) ? x : a), lines[0])._sub.id;
+  lines = lines.filter((x) => x._sub.id === newest);
   if (r.cas) { const same = lines.filter((x) => scCas(x.cas) === scCas(r.cas)); if (same.length) lines = same; }
   const text = lines.map((x) => [x.explanation, x.materialRemarks, x.purpose].filter(Boolean).join(" ")).join(" | ").replace(/\s+/g, " ").trim();
   const src = lines[0], quote = (text || "").slice(0, 160);
