@@ -11,8 +11,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:light;--bg:#fcf1e6;--panel:#fff;--soft:#f2f5fd;--glow1:#fbe3cc;--glow2:#fbe6d2;--side-a:#4a28b5;--side-b:#3f20a0;--nav-on-bg:#fff;--nav-on-ink:#4524ad;--gov-a:#5f3bd6;--gov-b:#5230c4;--kpi-hover:#e9eefb;--row-hover:#f6f8fe;--track:#fff;--green-line:#bfe3cd;--red-line:#f1c4c0;--yellow-line:#efd9a6;--purple-line:#d8cbf5;--brand-ink:#08819a;--prot-ink:#8a5606;--drop-line:#c9cdea;--app-sh:0 20px 60px rgba(120,70,20,.12);--drawer-sh:0 18px 50px rgba(69,36,173,.16);--ink:#1d1546;--ink2:#34295f;--muted:#7b7a98;--faint:#a9a8c0;--line:#e9ebf5;--line2:#d9dcec;
---side:#4524ad;--side2:#5535c2;--side3:#fff;--brand:#0bc4de;--brand2:#08a9c1;--brand-bg:#dff7fb;--violet:#5b30d6;--violet-bg:#ece6fb;
+:root{color-scheme:light;--bg:#e8e2fa;--panel:#fff;--soft:#f3f0fd;--glow1:#dcd2f7;--glow2:#ece6fc;--side-a:#4527a8;--side-b:#4527a8;--nav-on-bg:#fff;--nav-on-ink:#4527a8;--gov-a:#5a3bc2;--gov-b:#5a3bc2;--kpi-hover:#e9e3fb;--row-hover:#f6f3ff;--track:#fff;--green-line:#bfe3cd;--red-line:#f1c4c0;--yellow-line:#efd9a6;--purple-line:#d8cbf5;--brand-ink:#4a2bb8;--pink:#e24b8f;--pink-bg:#fde8f2;--teal:#0e9fa3;--teal-bg:#dcf4f4;--prot-ink:#8a5606;--drop-line:#c9cdea;--app-sh:0 24px 64px rgba(69,39,168,.18);--drawer-sh:0 18px 50px rgba(69,36,173,.16);--ink:#1d1546;--ink2:#34295f;--muted:#6f6c93;--faint:#9d9ab8;--line:#e8e4f5;--line2:#d8d2ee;
+--side:#4527a8;--side2:#5535c2;--side3:#fff;--brand:#6a3fe0;--brand2:#5530c8;--brand-bg:#ece6fb;--violet:#5b30d6;--violet-bg:#ece6fb;
 --green:#0f9d76;--green-bg:#dcf5ec;--red:#e0405f;--red-bg:#fde7ec;--yellow:#b87408;--yellow-bg:#fff1d6;--purple:#5b30d6;--purple-bg:#ece6fb;--blue:#2f6fd6;--blue-bg:#e6efff;
 --r:22px;--sh:var(--sh-base,0 2px 4px rgba(69,36,173,.04),0 10px 30px rgba(69,36,173,.07));--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
 *{box-sizing:border-box}
@@ -20,9 +20,9 @@ body{margin:0;font:500 14px/1.5 Urbanist,system-ui,-apple-system,"Segoe UI",Robo
 button{font:inherit;cursor:pointer;color:inherit}input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .app{display:grid;grid-template-columns:268px 1fr;min-height:calc(100vh - 40px);margin:20px;background:var(--panel);border-radius:34px;box-shadow:var(--app-sh);overflow:hidden}
-aside{background:linear-gradient(180deg,var(--side-a) 0%,var(--side-b) 100%);color:#d9d0fa;padding:22px 16px 18px;display:flex;flex-direction:column;gap:3px;position:sticky;top:20px;height:calc(100vh - 40px);overflow:auto;border-radius:34px;margin:0 0 0 0}
+aside{background:var(--side);color:#d9d0fa;padding:22px 16px 18px;display:flex;flex-direction:column;gap:3px;position:sticky;top:20px;height:calc(100vh - 40px);overflow:auto;border-radius:34px;margin:0 0 0 0}
 .brand{display:flex;gap:11px;align-items:center;padding:4px 8px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:6px}
-.logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#27d3ea,#0aa3c0);display:grid;place-items:center;color:#fff;box-shadow:0 6px 16px rgba(11,196,222,.4);flex:none}
+.logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#8b6cf0,#e24b8f);display:grid;place-items:center;color:#fff;box-shadow:0 6px 16px rgba(106,63,224,.4);flex:none}
 .brand small{display:block;font:600 10px var(--mono);letter-spacing:.1em;color:#b3a4ef}
 .brand b{display:block;color:#fff;font-size:19px;font-weight:700;letter-spacing:-.01em}
 .sec{font:600 10.5px var(--mono);letter-spacing:.12em;color:#a493ee;margin:18px 12px 6px;text-transform:uppercase}
@@ -38,14 +38,14 @@ aside{background:linear-gradient(180deg,var(--side-a) 0%,var(--side-b) 100%);col
 .user{margin-top:10px;display:grid;gap:7px}
 .user input,.user select{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:12px;padding:8px 11px;width:100%}.user select option{color:var(--ink);background:var(--panel)}
 .user input::placeholder{color:#b8abf0}
-.rolehint{font-size:11.5px;color:#27d3ea;font-weight:600}
+.rolehint{font-size:11.5px;color:#c9b8ff;font-weight:600}
 main{padding:28px 34px 40px;min-width:0;max-width:1640px;width:100%}
 .pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px;flex-wrap:wrap}
 .crumb{font:600 11px var(--mono);letter-spacing:.12em;color:var(--brand2);text-transform:uppercase}
 h1{margin:4px 0 3px;font-size:30px;letter-spacing:-.02em;font-weight:700}
 .sub{color:var(--muted);margin:0;max-width:760px}
 .headmeta{display:flex;gap:8px;flex-wrap:wrap}
-.pill{display:inline-flex;align-items:center;gap:7px;background:var(--soft);border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;color:var(--ink2)}.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#27d3ea,#5b30d6);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}
+.pill{display:inline-flex;align-items:center;gap:7px;background:var(--soft);border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;color:var(--ink2)}.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#c9b8ff,#5b30d6);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}
 .pill.prot{background:var(--yellow-bg);color:var(--prot-ink)}
 .banner{background:var(--soft);border:0;color:var(--muted);border-radius:14px;padding:8px 13px;font-size:12px;margin-bottom:16px;display:flex;gap:8px;align-items:center}
 .banner::before{content:"i";width:16px;height:16px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font:700 11px/16px Inter;text-align:center;flex:none}
@@ -73,7 +73,7 @@ button.kpi:hover{transform:translateY(-2px);background:var(--kpi-hover)}
 .tools select,select.btn{padding:10px 12px;border:1.5px solid transparent;border-radius:14px;background:var(--panel)}
 .btn{border:1.5px solid transparent;background:var(--panel);border-radius:14px;padding:10px 16px;font-weight:650;transition:all .12s}
 .btn:hover{border-color:var(--violet);color:var(--violet)}
-.btn.pri{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:0 6px 16px rgba(11,196,222,.35)}
+.btn.pri{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:0 6px 16px rgba(106,63,224,.32)}
 .btn.pri:hover{background:var(--brand2);border-color:var(--brand2);color:#fff}
 .btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
@@ -115,6 +115,56 @@ label.l{display:block;font-size:12px;color:var(--muted);margin-top:10px;font-wei
 .toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;padding:12px 16px;border-radius:12px;font-size:13px;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none;max-width:440px;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:50}.toast.on{opacity:1;transform:none}
 details summary{cursor:pointer;color:var(--muted);font-size:12.5px;font-weight:500}
 .small{font-size:12px;color:var(--muted)}
+/* overview hero + refreshed tiles */
+.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);background:var(--side);color:#fff;border-radius:var(--r);overflow:hidden;margin-bottom:16px;box-shadow:var(--sh)}
+.hero-main{display:flex;gap:28px;align-items:center;padding:26px 30px}
+.ring{position:relative;width:132px;height:132px;flex:none}.ring svg{transform:rotate(-90deg);display:block}
+.ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px;letter-spacing:-.03em;font-variant-numeric:tabular-nums}.ring b small{font-size:16px;margin-left:1px;opacity:.8}
+.hero-text{min-width:0;flex:1}.hero-text p{margin:0;color:#ddd3ff;font-size:13px}
+.hero h2{font-size:26px;line-height:1.2;margin:4px 0 6px;letter-spacing:-.02em;font-weight:700}
+.hero-eyebrow{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#cbbdff}
+.hero-side{background:rgba(255,255,255,.09);padding:22px 24px;display:grid;gap:8px;align-content:center}
+.att{display:grid;grid-template-columns:12px 1fr auto 16px;gap:12px;align-items:center;background:rgba(255,255,255,.12);border:0;border-radius:14px;padding:11px 14px;color:#fff;text-align:left;font-weight:600;font-size:13.5px;transition:background .12s,transform .12s}
+.att:hover{background:rgba(255,255,255,.22);transform:translateX(2px)}
+.att i{width:10px;height:10px;border-radius:50%;background:#5eead4}.att.red i{background:#ff7a93;box-shadow:0 0 0 4px rgba(255,122,147,.25)}.att.amber i{background:#ffc247}
+.att b{font-size:21px;font-variant-numeric:tabular-nums}.att em{font-style:normal;opacity:.7}
+.hero .prog{background:rgba(255,255,255,.2)}.hero .legend2 span{color:#e9e2ff}
+.kpis5{grid-template-columns:repeat(5,1fr)}
+.kpi.g{background:var(--green-bg)}.kpi.r{background:var(--red-bg)}.kpi.y{background:var(--yellow-bg)}.kpi.p{background:var(--violet-bg)}.kpi.b{background:var(--teal-bg)}.kpi.b b{color:var(--teal)}
+.kpi:hover{box-shadow:var(--sh);transform:translateY(-2px)}
+.fu-panel .fu-ov{grid-template-columns:repeat(2,1fr)}
+@media(max-width:1180px){.hero{grid-template-columns:1fr}.kpis5{grid-template-columns:repeat(2,1fr)}}
+/* supplier follow-up */
+.fu-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px}
+.fu-search{min-width:280px;flex:0 1 340px;padding:9px 14px;border:1.5px solid transparent;border-radius:14px;background:var(--panel);box-shadow:var(--sh)}
+.fu-search:focus{outline:none;border-color:var(--brand)}
+.fu-card{margin-bottom:14px;padding:20px 22px}
+.fu-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.fu-head h3{margin:0 0 2px;font-size:17px}
+.fu-state{text-align:right;display:grid;gap:2px;justify-items:end}
+.fu-flow{list-style:none;display:flex;gap:6px;margin:0 0 14px;padding:0;flex-wrap:wrap}
+.fu-flow li{display:flex;align-items:center;gap:8px;padding:5px 14px 5px 6px;border-radius:999px;background:var(--soft);color:var(--faint);font-size:12.5px;font-weight:600}
+.fu-flow li i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font:700 11px var(--mono);font-style:normal;background:var(--panel);color:var(--faint)}
+.fu-flow li.done{color:var(--green)}.fu-flow li.done i{background:var(--green-bg);color:var(--green)}
+.fu-flow li.cur{background:var(--violet-bg);color:var(--violet)}.fu-flow li.cur i{background:var(--violet);color:#fff}
+.fu-tablewrap{overflow:auto;border-radius:14px;background:var(--soft);padding:2px 10px 4px}
+.fu-table th{background:transparent;position:static;font-size:11.5px;letter-spacing:.02em;text-transform:uppercase}
+.fu-table td{padding:9px 10px}.fu-table tr:last-child td{border-bottom:0}
+.fu-note{max-width:360px;line-height:1.45}
+.fu-actions{margin-top:14px}.fu-spacer{flex:1}
+.fu-hist{margin-top:10px}.fu-hist div{padding:2px 0}
+.fu-mail{min-height:340px;font:12.5px/1.55 var(--mono);white-space:pre-wrap}
+.btn.sm{padding:5px 11px;font-size:12px;border-radius:10px;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--muted)}
+.linkbtn{border:0;background:none;padding:0;font:inherit;color:var(--violet);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.fu-ov{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}@media(max-width:900px){.fu-ov{grid-template-columns:repeat(2,1fr)}}
+.fu-ov .blk{background:var(--panel);border-radius:16px;padding:14px 16px;text-align:left;border:1.5px solid transparent;transition:border-color .12s,transform .12s}
+.fu-ov .blk:hover{border-color:var(--violet);transform:translateY(-1px)}
+.fu-ov .blk b{font-size:26px;font-variant-numeric:tabular-nums;letter-spacing:-.02em;display:block}
+.fu-ov .blk span{font-size:12.5px;color:var(--muted);font-weight:600;display:block}
+.fu-ov .blk em{font-style:normal;font-size:11.5px;color:var(--faint)}
+.sc-switches{display:grid;gap:6px;margin:12px 0 4px;font-size:13px;font-weight:600}.sc-switches label{display:flex;gap:8px;align-items:center}
+.sc-quote{font-style:italic;margin-top:2px}
 /* overview */
 .ov{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
 .ov>.c4{grid-column:span 4}.ov>.c5{grid-column:span 5}.ov>.c6{grid-column:span 6}.ov>.c7{grid-column:span 7}.ov>.c8{grid-column:span 8}.ov>.c12{grid-column:span 12}
@@ -173,14 +223,14 @@ details summary{cursor:pointer;color:var(--muted);font-size:12.5px;font-weight:5
    ============================================================ */
 [data-theme=dark]{
   color-scheme:dark;
-  --bg:#0d0a1f; --glow1:#2a1550; --glow2:#1a1038;
+  --bg:#0f0b22; --glow1:#1d1342; --glow2:#150f32;
   --panel:#171231; --soft:#1f1943;
   --ink:#efecfb; --ink2:#d3cdf0; --muted:#9a93c2; --faint:#746ca0;
   --line:#2b2456; --line2:#3b3270;
-  --side:#3a1f93; --side-a:#3d2199; --side-b:#2b1674;
+  --side:#33208a; --side-a:#33208a; --side-b:#33208a;
   --nav-on-bg:#fff; --nav-on-ink:#2b1674;
-  --gov-a:#4b2bb0; --gov-b:#3a2192;
-  --brand:#22d3ee; --brand2:#38dcf2; --brand-bg:#0b3a44; --brand-ink:#7fe6f5;
+  --gov-a:#45299f; --gov-b:#45299f;
+  --brand:#8b6cf0; --brand2:#a68bf7; --brand-bg:#2a2060; --brand-ink:#c4b5fd; --pink:#f472b6; --pink-bg:#3a1530; --teal:#2dd4bf; --teal-bg:#0d3331;
   --violet:#9a7cf5; --violet-bg:#2a2060;
   --green:#34d399; --green-bg:#0b2f25; --green-line:#1b5a43;
   --red:#fb7185;   --red-bg:#361720;   --red-line:#7d2a3d;
@@ -963,7 +1013,14 @@ class JudgementEngine {
                 nodeId = next;
             }
             else if (node.type === "ask") {
-                const a = answers[node.key];
+                let a = answers[node.key];
+                // A question for the supplier may already be answered on their self-check sheet.
+                // A reviewer's own answer always wins; this only fills the gap.
+                let viaSelfCheck = null;
+                if (a == null && node.askWho === "supplier" && typeof answers.__selfCheck === "function") {
+                    const sug = answers.__selfCheck(node);
+                    if (sug && node.options.some((o) => o.value === sug.value)) { a = sug.value; viaSelfCheck = sug; }
+                }
                 let opt = node.options.find((o) => o.value === a);
                 if (!opt && node.key === "destination" && a != null) {
                     // An answer saved before the destination-code list existed was stored as the
@@ -980,7 +1037,7 @@ class JudgementEngine {
                     return this.finish({ ...base, substanceChain: chain, status: "AWAITING_INPUT", routeTo: route, groupScope: scope,
                         pendingQuestion: { key: node.key, askWho: node.askWho, question: `${node.label}: ${node.question}`, options: node.options.map(({ value, label }) => ({ value, label })) } });
                 }
-                base.trace.push({ nodeId, label: node.label, kind: "ask", status: "done", result: opt.value, detail: opt.label, answeredBy: node.askWho });
+                base.trace.push({ nodeId, label: node.label, kind: "ask", status: "done", result: opt.value, detail: opt.label, answeredBy: node.askWho, key: node.key, ...(viaSelfCheck ? { viaSelfCheck } : {}) });
                 nodeId = opt.next;
             }
             else {
@@ -1083,9 +1140,9 @@ const STORE = "imds-auto-judgement-v1";
 let S = { records: [], answers: {}, partAnswers: {}, approvals: {}, audit: [], imports: [], flags: {}, settings: {} };
 try { const raw = localStorage.getItem(STORE); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) {}
 S.flags = S.flags || {}; S.settings = S.settings || {}; S.selfChecks = S.selfChecks || [];
-S.followUps = S.followUps || {}; S.resubmits = S.resubmits || {};
+S.followUps = S.followUps || {}; S.resubmits = S.resubmits || {}; S.tmc = S.tmc || {};
 /** WARP part-number auto-judgment rule. Editable in Settings; stored with the data. */
-const RULE_DEFAULTS = { warpAuto: true, warpRequireName: true, warpRequireEngineOk: true };
+const RULE_DEFAULTS = { warpAuto: true, warpRequireName: true, warpRequireEngineOk: true, selfCheckUse: true, selfCheckAuto: true };
 function rule(k) { return S.settings[k] === undefined ? RULE_DEFAULTS[k] : S.settings[k]; }
 function setRule(k, v) {
   S.settings[k] = v;
@@ -1129,7 +1186,9 @@ function evaluateAll() {
   ITEMS = S.records.map((r) => {
     const sib = byPart.get(IMDS.partKey(r)).filter((x) => x !== r);
     const answers = answersFor(r);
-    return { record: r, siblings: sib, answers, key: IMDS.recordKey(r), evaluation: engine.evaluate(r, answers, sib) };
+    // supplier self-check sheets answer the engine's supplier questions before we ever e-mail anyone
+    const engineAnswers = (rule("selfCheckUse") && (S.selfChecks || []).length) ? Object.assign({}, answers, { __selfCheck: (node) => selfCheckSuggest(r, node) }) : answers;
+    return { record: r, siblings: sib, answers, key: IMDS.recordKey(r), evaluation: engine.evaluate(r, engineAnswers, sib) };
   });
   GROUP_OF = new Map();
   for (const g of IMDS.groupIdentical(ITEMS.filter((i) => !S.approvals[i.key]))) for (const it of g) GROUP_OF.set(it.key, g);
@@ -1152,9 +1211,47 @@ function setFlag(it, status, comment) {
   }
   save(); evaluateAll(); render();
 }
+/** Cases the Appendix II flow sends to TMC / TMNA / TME / TDEM. They must be confirmed there
+ *  before anyone records a final OK / NG. */
+const TMC_LABEL = { NEED: "Confirm to TMC first", SENT: "Sent to TMC — waiting", CONFIRMED: "TMC answered" };
+const isTmcCase = (it) => !finalOf(it) && String(it.evaluation.routeTo || "").startsWith("Escalation");
+const tmcOf = (it) => S.tmc[it.key] || { status: "NEED", history: [] };
+const tmcHeld = (it) => isTmcCase(it) && tmcOf(it).status !== "CONFIRMED";
+function setTmc(it, status, decision, note) {
+  const u = user(), prev = tmcOf(it), now = new Date().toISOString();
+  if (status === null) delete S.tmc[it.key];
+  else S.tmc[it.key] = { status, decision: decision || null, note: note || "", at: now, user: u.user, role: u.role,
+    history: [...(prev.history || []), { at: now, user: u.user, status, decision: decision || null, note: note || "" }].slice(-20) };
+  S.audit.push({ at: now, ...u, action: status === null ? "TMC_RESET" : `TMC_${status}`, recordKey: it.key, part: it.record.deliveryPartNo,
+    detail: status === null ? "" : `${TMC_LABEL[status]}${decision ? " — " + decision : ""}${note ? " — " + note : ""}` });
+  save(); render();
+}
+function tmcSent(it) { const n = prompt("Note (optional) — how / to whom did you send it?", ""); if (n !== null) setTmc(it, "SENT", null, n); }
+function tmcAnswer(it) {
+  const d = (prompt("TMC / TMNA / TME answer — type OK or NG", "") || "").trim().toUpperCase();
+  if (!d) return;
+  if (d !== "OK" && d !== "NG") return toast("Please type OK or NG");
+  const n = prompt("Their reply or reference (optional)", ""); if (n === null) return;
+  setTmc(it, "CONFIRMED", d, n);
+}
+function tmcMail(cases) {
+  const pic = user().user === "unnamed" ? "[your name]" : user().user, title = S.settings.picTitle || "Material Engineering - TMMIN";
+  let body = `Dear TMC / TMNA / TME Team,\nThis is ${pic} from ${title} as IMDS PIC.\nWe need your confirmation on the following IMDS case${cases.length === 1 ? "" : "s"} before we can record the final judgement.\n`;
+  cases.forEach((it, i) => {
+    const r = it.record, e = it.evaluation, sc = (e.trace || []).find((t) => t.viaSelfCheck), a = it.answers || {};
+    body += `\n${i + 1}. Supplier : ${r.supplierCode || "—"} ${r.companyName || ""}\n   Part Number : ${r.deliveryPartNo || "—"}\n   Error : ${titleCase(e.errorCategory)}\n`;
+    if (r.cas) body += `   Substance : CAS ${r.cas}${r.substanceName ? " (" + String(r.substanceName).split("\n")[0] + ")" : ""}${r.contentPct != null ? ", " + r.contentPct + " wt%" : ""}\n`;
+    if (a.destination) body += `   Vehicle destination : ${a.destination}\n`;
+    if (sc) body += `   Supplier confirmation : ${sc.viaSelfCheck.why}${sc.viaSelfCheck.quote ? ` ("${sc.viaSelfCheck.quote}")` : ""}\n`;
+    body += `   Reason for escalation : ${e.comment || (e.reasons || [])[0] || "Appendix II flow ends in a contact to TMC"}\n`;
+  });
+  body += `\nPlease confirm whether this can be judged OK or NG.\nWe look forward for your feedback.\nThank you for your support.\n\nBest Regards,\n${pic}\n${title}`;
+  return { subject: `IMDS Judgement Confirmation Needed - ${cases.length} case${cases.length === 1 ? "" : "s"}`, body };
+}
 function statusTag(it) {
   const f = finalOf(it);
-  if (f) return `<span class="tag ${f.newStatus === "FINAL_OK" ? "t-ok" : "t-ng"}">${f.newStatus === "FINAL_OK" ? "OK" : "NG"}</span>${f.judgmentType === "Auto Judged" ? ` <span class="tag t-route" title="Judged automatically by the WARP part-number rule">Auto</span>` : ""}`;
+  if (f) return `<span class="tag ${f.newStatus === "FINAL_OK" ? "t-ok" : "t-ng"}">${f.newStatus === "FINAL_OK" ? "OK" : "NG"}</span>${f.judgmentType === "Auto Judged" ? ` <span class="tag t-route" title="${f.autoSource === "Supplier self-check" ? "Judged automatically: the supplier already confirmed it on their self-check sheet" : "Judged automatically by the WARP part-number rule"}">${f.autoSource === "Supplier self-check" ? "Self-check" : "Auto"}</span>` : ""}`;
+  if (tmcHeld(it)) return `<span class="tag t-wait">⚠️ ${tmcOf(it).status === "SENT" ? "Waiting for TMC" : "Confirm to TMC first"}</span>`;
   const fl = flagOf(it);
   if (fl && fl.status === FLAG_SUPPLIER) return `<span class="tag t-wait">⚠️ Need confirmation</span>`;
   if (fl && fl.status === FLAG_WORKING) return `<span class="tag t-rev">Working</span>`;
@@ -1167,12 +1264,13 @@ function statusTag(it) {
 function statusKey(it) {
   const f = finalOf(it);
   if (f) return f.newStatus === "FINAL_OK" ? "OK" : "NG";
+  if (tmcHeld(it)) return "NEED_TMC";
   const fl = flagOf(it);
   if (fl) return fl.status;
   return it.evaluation.status;
 }
 const WORKSPACE_STATUSES = [
-  ["OK", "OK"], ["NG", "NG"], ["NEED_SUPPLIER", "⚠️ Need confirmation to supplier"], ["WORKING", "Working (under internal judgment)"],
+  ["OK", "OK"], ["NG", "NG"], ["NEED_SUPPLIER", "⚠️ Need confirmation to supplier"], ["NEED_TMC", "⚠️ Confirm to TMC / TMNA first"], ["WORKING", "Working (under internal judgment)"],
   ["AWAITING_INPUT", "Needs input"], ["RECOMMEND_OK", "Recommend OK"], ["RECOMMEND_NG", "Recommend NG"], ["NEED_HUMAN_REVIEW", "Human review"],
 ];
 /** Pending internal judgment = anything a person still has to act on inside the company. */
@@ -1209,7 +1307,7 @@ function warpAutoCheck(it) {
 }
 /** Apply the rule across the register. Never touches a case that already has a
  *  judgement — manual decisions are not overwritten. */
-function applyAutoJudgement() {
+function applyWarpAuto() {
   if (!rule("warpAuto")) return 0;
   let n = 0;
   for (const it of ITEMS) {
@@ -1234,6 +1332,36 @@ function applyAutoJudgement() {
   return n;
 }
 
+/** Judge OK automatically where the supplier's own self-check sheet already answered the
+ *  engine's question AND the engine's flow then ends in OK. Anything that would end in NG or
+ *  escalation stays a recommendation for an Approver — the sheet never forces a bad outcome. */
+function applySelfCheckJudgement() {
+  if (!rule("selfCheckAuto") || !rule("selfCheckUse")) return 0;
+  let n = 0;
+  for (const it of ITEMS) {
+    if (S.approvals[it.key]) continue;
+    const e = it.evaluation;
+    const used = (e.trace || []).filter((t) => t.viaSelfCheck);
+    if (!used.length || e.status !== "RECOMMEND_OK") continue;
+    const why = used.map((t) => `${t.viaSelfCheck.why}${t.viaSelfCheck.quote ? ` — supplier wrote: "${t.viaSelfCheck.quote}"` : ""}`).join("; ");
+    const entry = {
+      recordKey: it.key, at: new Date().toISOString(), user: "Supplier self-check rule", role: "System", action: "AUTO_JUDGE",
+      previousStatus: e.status, newStatus: "FINAL_OK", aiRecommendation: e.recommendedJudge, aiTimestamp: e.evaluatedAt,
+      comment: `Confirmed by supplier in Self-Check: ${why}`, judgmentType: "Auto Judged", autoSource: "Supplier self-check",
+      flowId: e.flowId, flowVersion: e.flowVersion, referenceVersions: e.referenceVersions,
+      part: it.record.deliveryPartNo, errorCategory: e.errorCategory, supplierCode: it.record.supplierCode,
+      evaluationSnapshot: { trace: e.trace, substanceChain: e.substanceChain },
+    };
+    S.approvals[it.key] = entry; S.audit.push({ ...entry }); delete S.flags[it.key]; n++;
+  }
+  return n;
+}
+function applyAutoJudgement() {
+  const n = applyWarpAuto() + applySelfCheckJudgement();
+  if (n) save();
+  return n;
+}
+
 // ---------------- views ----------------
 function render() {
   document.querySelectorAll(".nav").forEach((b) => b.classList.toggle("on", b.dataset.v === UI.view));
@@ -1243,7 +1371,8 @@ function render() {
   const nSelf = $("#n-self"); if (nSelf) nSelf.textContent = selfCheckRows().length;
   // suppliers still to contact, plus parts still to be resubmitted
   $("#n-sup").textContent = Object.keys(supplierOpen()).filter((k) => fuOf(k).status !== "REPLIED").length
-    + resubmitCases().filter((it) => (S.resubmits[it.key] || {}).status !== "RESUBMITTED").length;
+    + resubmitCases().filter((it) => (S.resubmits[it.key] || {}).status !== "RESUBMITTED").length
+    + ITEMS.filter(tmcHeld).length;
   ({ overview: viewOverview, register: viewRegister, import: viewImport, history: viewHistory, supplier: viewSupplier, selfcheck: viewSelfCheck, refs: viewRefs, rules: viewRules })[UI.view]();
 }
 
@@ -1326,7 +1455,7 @@ function viewOverview() {
   const pc = (n) => (d.total ? Math.round((n / d.total) * 100) : 0);
   const kpi = (cls, label, n, sub, go) => `<button class="kpi ${cls}" ${go ? `data-go="${go}"` : ""}><span>${label}</span><b>${n}</b><em>${sub}</em></button>`;
   const catRows = Object.entries(d.cats).sort((a, b) => b[1].all - a[1].all);
-  const supRows = Object.entries(d.sup).sort((a, b) => (b[1].needSup + b[1].pending) - (a[1].needSup + a[1].pending)).slice(0, 8);
+  const supRows = Object.entries(d.sup).sort((a, b) => (b[1].needSup + b[1].pending) - (a[1].needSup + a[1].pending)).slice(0, 5);
   const trendDays = Object.keys(d.trend).sort().slice(-14);
   const trendMax = Math.max(1, ...trendDays.map((k) => d.trend[k]));
   const BAND = [["OK", d.ok.length, "var(--green)"], ["NG", d.ng.length, "var(--red)"], ["Need confirmation", d.needSup.length, "#f5a524"],
@@ -1338,36 +1467,71 @@ function viewOverview() {
                     ["Waiting on an Approver to confirm OK/NG", d.readyToConfirm.length, "RECOMMEND_OK"],
                     ["Cannot be judged — data missing or conflicting", d.review.length, "NEED_HUMAN_REVIEW"]].sort((a, b) => b[1] - a[1]);
 
+  const fu = fuStats();
+  const scAnswered = ITEMS.filter((i) => i.evaluation.trace.some((t) => t.viaSelfCheck)).length;
+  const plural = (n, w) => `${n} ${w}${n === 1 ? "" : "s"}`;
+  // what needs attention first: supplier-side blockers outrank internal ones, then biggest first
+  const att = [
+    { sev: "red", n: fu.awaiting, h: `${plural(fu.awaiting, "rejected part")} waiting for IMDS resubmission`, l: "Rejected parts awaiting resubmission", a: 'data-fuo="resubmit" data-rs="awaiting"' },
+    { sev: "red", n: fu.tmcNeed + fu.tmcSent, h: `${plural(fu.tmcNeed + fu.tmcSent, "case")} on hold for TMC / TMNA confirmation`, l: "On hold — confirm to TMC / TMNA", a: 'data-fuo="tmc"' },
+    { sev: "red", n: fu.need, h: `${plural(fu.need, "supplier")} not contacted yet`, l: "Suppliers not contacted yet", a: 'data-fuo="open" data-fs="NEED"' },
+    { sev: "amber", n: d.readyToConfirm.length, h: `${plural(d.readyToConfirm.length, "case")} ready for an Approver to confirm`, l: "Ready for an Approver to confirm", a: 'data-go="RECOMMEND_OK"' },
+    { sev: "amber", n: d.awaiting.length, h: `${plural(d.awaiting.length, "case")} waiting for your answer`, l: "Waiting for your answer", a: 'data-go="AWAITING_INPUT"' },
+    { sev: "amber", n: d.review.length, h: `${plural(d.review.length, "case")} need a human decision`, l: "Need a human decision", a: 'data-go="NEED_HUMAN_REVIEW"' },
+  ].filter((x) => x.n > 0).sort((x, y) => (x.sev === y.sev ? 0 : x.sev === "red" ? -1 : 1) || y.n - x.n);
+  const C = 2 * Math.PI * 52, ringOff = C * (1 - d.pct / 100);
+  const hero = `<section class="hero" aria-label="Overall status">
+    <div class="hero-main">
+      <div class="ring" role="img" aria-label="${d.pct} percent judged"><svg viewBox="0 0 120 120" width="132" height="132"><circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="12"/><circle cx="60" cy="60" r="52" fill="none" stroke="#5eead4" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${ringOff.toFixed(1)}"/></svg><b>${d.pct}<small>%</small></b></div>
+      <div class="hero-text">
+        <div class="hero-eyebrow">${att.length ? "Biggest issue right now" : "All clear"}</div>
+        <h2>${att.length ? esc(att[0].h) : "Everything is judged — nothing needs attention"}</h2>
+        <p>${d.judged} of ${d.total} submissions judged · ${d.pending.length} pending internal judgment${scAnswered ? ` · ${scAnswered} answered from supplier self-checks` : ""}</p>
+        <div class="prog" style="margin-top:12px">${BAND.map(([l, n, c]) => `<i title="${esc(l)}: ${n}" style="width:${(n / d.total) * 100}%;background:${c}"></i>`).join("")}</div>
+        <div class="legend2" style="flex-wrap:wrap;margin-top:10px">${BAND.map(([l, n, c]) => `<span><i class="sw" style="background:${c}"></i>${esc(l)} ${n}</span>`).join("")}</div>
+      </div>
+    </div>
+    <div class="hero-side"><div class="hero-eyebrow">Needs attention first</div>
+      ${att.length ? att.slice(0, 4).map((x) => `<button class="att ${x.sev}" ${x.a}><i></i><span>${esc(x.l)}</span><b>${x.n}</b><em>→</em></button>`).join("") : `<div class="att ok"><i></i><span>Nothing is blocked</span></div>`}
+    </div></section>`;
+  const tile = (cls, label, n, sub, a) => `<button class="kpi ${cls}" ${a}><span>${label}</span><b>${n}</b><em>${sub}</em></button>`;
   $("#main").innerHTML = header("HOME / OVERVIEW", "Overview",
-    `${d.total} submissions · ${d.pending.length} pending internal judgment · ${d.judged} judged (${d.pct}%) · ${today}`) + `
-  <div class="kpis">
-    ${kpi("k", "Total submissions", d.total, `${d.parts.size} part numbers`, "")}
-    ${kpi("p", "Pending internal judgment", d.pending.length, `${pc(d.pending.length)}% of all submissions`, "PENDING")}
-    ${kpi("g", "OK", d.ok.length, `${d.auto} auto-judged · ${d.ok.length - d.auto} manual`, "OK")}
-    ${kpi("r", "NG", d.ng.length, `${pc(d.ng.length)}% of all submissions`, "NG")}
-    ${kpi("y", "⚠️ Need confirmation to supplier", d.needSup.length, d.needSup.length ? "waiting on the supplier" : "none outstanding", "NEED_SUPPLIER")}
+    `${d.total} submissions · ${d.parts.size} part numbers · ${today}`) + hero + `
+  <div class="kpis kpis5">
+    ${tile("p", "Pending internal judgment", d.pending.length, `${pc(d.pending.length)}% of all submissions`, 'data-go="PENDING"')}
+    ${tile("y", "Waiting on suppliers", fu.need + fu.sent, `${fu.need} not contacted · ${fu.sent} followed up`, 'data-fuo="open"')}
+    ${tile("r", "Rejected — awaiting resubmission", fu.awaiting, `${fu.resubDone} of ${fu.resub.length} resubmitted`, 'data-fuo="resubmit" data-rs="awaiting"')}
+    ${tile("g", "Judged OK", d.ok.length, `${d.auto} auto-judged · ${d.ok.length - d.auto} manual`, 'data-go="OK"')}
+    ${tile("b", "Answered by supplier self-check", scAnswered, scAnswered ? "no e-mail needed" : "import a self-check sheet", 'data-goview="selfcheck"')}
   </div>
   <div class="ov">
-    <div class="card w c5"><h3>Completion</h3><p class="hint">Submissions with a recorded OK or NG.</p>
-      <div class="bignum">${d.pct}<span style="font-size:22px">%</span></div>
-      <div class="prog" style="margin-top:10px">${BAND.map(([l, n, c]) => `<i title="${esc(l)}: ${n}" style="width:${(n / d.total) * 100}%;background:${c}"></i>`).join("")}</div>
-      <div class="legend2" style="flex-wrap:wrap;margin-top:12px">${BAND.map(([l, n, c]) => `<span><i class="sw" style="background:${c}"></i>${esc(l)} ${n}</span>`).join("")}</div>
-      <div class="tile" style="margin-top:14px"><div class="ti" style="background:var(--brand)">${ICO.up}</div><div><b>${d.readyToConfirm.length}</b><span>ready for an Approver to confirm</span></div></div>
-      <div class="tile"><div class="ti" style="background:var(--violet)">${ICO.inn}</div><div><b>${d.awaiting.length + d.review.length}</b><span>need a person to answer or decide</span></div></div>
-    </div>
-    <div class="card c7"><h3>Where the bottleneck is</h3><p class="hint">Open work, biggest first. Click to open those cases.</p>
+    <div class="card w c7"><h3>Where the bottleneck is</h3><p class="hint">Open work, biggest first. Click to open those cases.</p>
       <div class="bars">${blockers.filter(([, n]) => n).map(([l, n, s]) => `<button class="bar" data-go="${s}"><span class="nm">${esc(l)}</span><span class="tr"><i class="o" style="width:${(n / Math.max(1, blockers[0][1])) * 100}%"></i></span><span class="v">${n}</span></button>`).join("") || `<p class="small">Nothing open — every submission has a judgement.</p>`}</div>
       <div class="legend2" style="margin-top:16px"><span>Total part numbers with an error <b style="color:var(--ink)">${d.partsWithError.size}</b></span><span>Total errors in the log <b style="color:var(--ink)">${d.total}</b></span></div>
     </div>
-    <div class="card c6" style="align-self:start"><h3>Error types</h3><p class="hint">Open vs. judged, per error category.</p>
-      <div class="legend2"><span><i class="sw" style="background:var(--brand)"></i>Open</span><span><i class="sw" style="background:var(--violet)"></i>Judged</span></div>
-      <div class="bars">${catRows.map(([c, v]) => `<button class="bar" data-cat="${esc(c)}"><span class="nm">${esc(c)}</span><span class="tr"><i class="o" style="width:${(v.open / v.all) * 100}%"></i><i class="f" style="width:${(v.done / v.all) * 100}%"></i></span><span class="v">${v.all}</span></button>`).join("")}</div>
-    </div>
-    <div class="card c6"><h3>By supplier</h3><p class="hint">Suppliers with the most open work.</p>
+    <div class="card w c5"><h3>By supplier</h3><p class="hint">Suppliers with the most open work.</p>
       <table><thead><tr><th>Supplier</th><th>OK</th><th>NG</th><th>⚠️</th><th>Pending</th><th>All</th></tr></thead><tbody>
       ${supRows.map(([k, v]) => { const [code, name] = k.split("|"); return `<tr><td><b class="mono">${esc(code)}</b><div class="small">${esc(name.slice(0, 28))}</div></td>
         <td style="color:var(--green)">${v.ok || ""}</td><td style="color:var(--red)">${v.ng || ""}</td><td style="color:var(--yellow)">${v.needSup || ""}</td><td>${v.pending || ""}</td><td><b>${v.all}</b></td></tr>`; }).join("")}
       </tbody></table>
+    </div>
+    <div class="card w c6" style="align-self:start"><h3>Error types</h3><p class="hint">Open vs. judged, per error category.</p>
+      <div class="legend2"><span><i class="sw" style="background:var(--brand)"></i>Open</span><span><i class="sw" style="background:var(--violet)"></i>Judged</span></div>
+      <div class="bars">${catRows.map(([c, v]) => `<button class="bar" data-cat="${esc(c)}"><span class="nm">${esc(c)}</span><span class="tr"><i class="o" style="width:${(v.open / v.all) * 100}%"></i><i class="f" style="width:${(v.done / v.all) * 100}%"></i></span><span class="v">${v.all}</span></button>`).join("")}</div>
+    </div>
+    <div class="card w c6 fu-panel"><h3>Supplier follow-up &amp; IMDS resubmission</h3><p class="hint">Rejected (NG) and accepted (OK) judgements, and how far suppliers have got. Click a block to open it in Supplier Follow-up.</p>
+      ${(() => { const f = fuStats(), tot = f.resub.length, pr = tot ? Math.round((f.resubDone / tot) * 100) : 0;
+      const blk = (cls, label, n, sub, tab, extra) => `<button class="blk" data-fuo="${tab}" ${extra || ""}><span>${label}</span><b style="color:var(--${cls})">${n}</b><em>${sub}</em></button>`;
+      return `<div class="fu-ov">
+        ${blk("green", "Accepted (OK)", f.accepted, "judged OK — nothing more to do", "none")}
+        ${blk("red", "Rejected (NG)", tot, `${f.resubDone} resubmitted · ${f.awaiting} awaiting`, "resubmit", 'data-rs="all"')}
+        ${blk("red", "Awaiting resubmission", f.awaiting, "supplier still has to fix IMDS", "resubmit", 'data-rs="awaiting"')}
+        ${blk("yellow", "Need follow-up", f.need, "suppliers not contacted yet", "open", 'data-fs="NEED"')}
+        ${blk("blue", "Already followed up", f.sent, "waiting for their answer", "open", 'data-fs="SENT"')}
+        ${blk("green", "Supplier replied", f.replied, "answer recorded", "open", 'data-fs="REPLIED"')}
+      </div>
+      <div class="prog" style="margin-top:14px" title="Rejected parts resubmitted"><i style="width:${pr}%;background:var(--green)"></i></div>
+      <div class="small" style="margin-top:6px">${f.resubDone} of ${tot} rejected part${tot === 1 ? "" : "s"} resubmitted (${pr}%)</div>`; })()}
     </div>
     ${trendDays.length > 1 ? `<div class="card c12"><h3>Judgement completion trend</h3><p class="hint">Judgements recorded per day, from the audit trail.</p>
       <div class="bars">${trendDays.map((day) => `<div class="bar"><span class="nm mono">${esc(day)}</span><span class="tr"><i class="f" style="width:${(d.trend[day] / trendMax) * 100}%"></i></span><span class="v">${d.trend[day]}</span></div>`).join("")}</div></div>` : ""}
@@ -1396,7 +1560,13 @@ function viewOverview() {
     if (g === "PENDING") { toReg({}); UI.pendingOnly = true; return render(); }
     toReg({ status: g });
   }));
+  document.querySelectorAll("[data-goview]").forEach((b) => (b.onclick = () => { UI.view = b.dataset.goview; UI.selfQ = ""; render(); }));
   document.querySelectorAll(".bar[data-cat]").forEach((b) => (b.onclick = () => toReg({ cat: b.dataset.cat })));
+  document.querySelectorAll("[data-fuo]").forEach((b) => (b.onclick = () => {
+    if (b.dataset.fuo === "none") return toReg({ status: "OK" });
+    UI.view = "supplier"; UI.fuTab = b.dataset.fuo; UI.fuOpen = null; UI.fuQ = "";
+    if (b.dataset.fs) UI.fuStatus = b.dataset.fs; if (b.dataset.rs) UI.fuRs = b.dataset.rs; render();
+  }));
   const upd = () => { UI.dlSup = $("#dl-sup").value; UI.dlStatus = $("#dl-status").value; UI.dlFrom = $("#dl-from").value; UI.dlTo = $("#dl-to").value; $("#dl-count").textContent = `${downloadRows().length} of ${ITEMS.length} records match`; };
   ["#dl-sup", "#dl-status", "#dl-from", "#dl-to"].forEach((s) => ($(s).onchange = upd));
   upd();
@@ -1556,7 +1726,8 @@ function drawer(it) {
   const r = it.record, e = it.evaluation, f = finalOf(it), fl = flagOf(it), g = GROUP_OF.get(it.key), u = user();
   const canFinal = u.role === "Approver" || u.role === "Administrator";
   const rec = e.recommendedJudge;
-  const decision = UI.decision || rec;
+  const tmcDone = isTmcCase(it) && tmcOf(it).status === "CONFIRMED" ? tmcOf(it) : null;
+  const decision = UI.decision || (tmcDone && tmcDone.decision) || rec;
   const override = decision && (decision !== rec || e.status !== "RECOMMEND_OK" && e.status !== "RECOMMEND_NG");
   const icon = (t) => t.kind === "outcome" ? `<span class="ic out">■</span>` : `<span class="ic ${t.status}">${t.status === "done" ? "✓" : t.status === "blocked" ? "!" : ""}</span>`;
   const answered = Object.entries(answersFor(r));
@@ -1564,6 +1735,13 @@ function drawer(it) {
   <h2 class="mono">${esc(r.deliveryPartNo)}</h2>
   <div class="meta">${esc(e.errorCategory)} · ${esc(r.supplierCode)} ${esc(r.companyName || "")} · module ${esc(r.moduleId)} v${esc(r.moduleVersion)}<br>
    ${esc(r.componentPartName || r.deliveryPartName || "")} ${r.materialName ? "· " + esc(r.materialName) : ""} ${r.materialClass ? "(" + esc(r.materialClass) + ")" : ""} ${r.contentPct != null ? "· " + esc(r.contentPct) + " wt%" : ""} ${r.applicationId ? "· App ID " + esc(r.applicationId) : ""}</div>
+  ${(() => {
+    const used = (e.trace || []).filter((t) => t.viaSelfCheck);
+    if (!used.length) return "";
+    return `<div class="box rec-ok"><b>✓ Confirmed by supplier on the self-check sheet</b>
+      ${used.map((t) => `<div class="small" style="margin-top:6px"><b>${esc(t.label)}</b> → ${esc(t.detail)}<br>${esc(t.viaSelfCheck.why)}${t.viaSelfCheck.quote ? `<br>“${esc(t.viaSelfCheck.quote)}”` : ""}</div>`).join("")}
+      <div class="small" style="margin-top:6px">No e-mail to the supplier is needed. ${f ? "" : "Your own answer below overrides this."}</div></div>`;
+  })()}
   ${(() => {
     const sc = selfChecksForPart(r.deliveryPartNo);
     if (!sc.length) return "";
@@ -1580,7 +1758,7 @@ function drawer(it) {
   })()}
   ${chainHtml(e.substanceChain)}
   <div class="small">Flow ${esc(e.flowId || "—")} ${e.flowVersion ? "v" + esc(e.flowVersion) : ""}</div>
-  <ul class="steps">${e.trace.map((t) => `<li>${icon(t)}<div><b>${esc(t.label)}</b><div>${esc(t.detail || "")}${t.answeredBy ? ` · answered (${esc(t.answeredBy)})` : ""}</div></div></li>`).join("")}</ul>
+  <ul class="steps">${e.trace.map((t) => `<li>${icon(t)}<div><b>${esc(t.label)}</b><div>${esc(t.detail || "")}${t.viaSelfCheck ? ` · <span class="tag t-route">from supplier self-check</span><div class="small sc-quote">${esc(t.viaSelfCheck.why)}${t.viaSelfCheck.quote ? `<br>“${esc(t.viaSelfCheck.quote)}”` : ""}</div>` : t.answeredBy ? ` · answered (${esc(t.answeredBy)})` : ""}</div></div></li>`).join("")}</ul>
   ${!f && e.pendingQuestion ? `<div class="box ask"><b>Needs your judgement</b> <span class="tag t-route">${esc(e.routeTo)}</span>
      <div>${esc(e.pendingQuestion.question)}</div>
      <div class="opts">${e.pendingQuestion.options.map((o) => `<button class="opt" data-ans="${esc(o.value)}">${esc(o.label)}</button>`).join("")}</div>
@@ -1594,6 +1772,11 @@ function drawer(it) {
       <div>${esc(f.comment)}</div>${f.imdsReject ? `<div class="small"><b>IMDS reject comment:</b> ${esc(f.imdsReject)}</div>` : ""}${f.justification ? `<div class="small">Justification: ${esc(f.justification)}</div>` : ""}
       <div class="small">Engine recommendation: ${esc(f.aiRecommendation || "none")} (${esc(f.previousStatus)}) at ${esc((f.aiTimestamp || "").slice(0, 16))}</div>
       ${canFinal ? `<button class="btn" id="reopen" style="margin-top:8px">Re-open (new decision will be logged)</button>` : ""}</div>` : `
+  ${isTmcCase(it) ? (() => { const t = tmcOf(it); return `<div class="box ${t.status === "CONFIRMED" ? "rec-ok" : "ask"}"><b>${t.status === "CONFIRMED" ? `✓ TMC / TMNA / TME answered: ${esc(t.decision)}` : "⚠️ Confirm to TMC / TMNA / TME first"}</b>
+      <div class="small" style="margin-top:4px">${esc(e.comment || "The Appendix II flow ends in a contact to TMC.")}</div>
+      ${t.status === "CONFIRMED" ? `<div class="small">${esc(t.user)} · ${esc(t.at.replace("T", " ").slice(0, 16))}${t.note ? " — " + esc(t.note) : ""}</div><div class="small">You can now record the final judgement below.</div>`
+        : `<div class="small">${t.status === "SENT" ? `Sent by ${esc(t.user)} on ${esc(t.at.replace("T", " ").slice(0, 16))} — waiting for their answer.` : "A final OK / NG can only be recorded after TMC has answered."}</div>
+      <div class="opts"><button class="opt" id="tmc-mail">✉ Draft e-mail to TMC</button>${t.status === "NEED" ? `<button class="opt" id="tmc-sent">Mark sent</button>` : ""}<button class="opt" id="tmc-answer">Record TMC's answer</button></div>`}</div>`; })() : ""}
   ${fl ? `<div class="box ${fl.status === "NEED_SUPPLIER" ? "ask" : "rev"}"><b>${fl.status === "NEED_SUPPLIER" ? "⚠️ Waiting on supplier confirmation" : "Under internal judgment"}</b>
       <div class="small">${esc(fl.user)} (${esc(fl.role)}) · ${esc(fl.at.replace("T", " ").slice(0, 16))}</div>
       ${fl.comment ? `<div>${esc(fl.comment)}</div>` : ""}
@@ -1603,11 +1786,11 @@ function drawer(it) {
     <div class="judge" style="grid-template-columns:1fr 1fr"><button class="jb ok ${decision === "OK" ? "on" : ""}" data-dec="OK">✓ OK</button><button class="jb ng ${decision === "NG" ? "on" : ""}" data-dec="NG">⊗ NG</button></div>
     <div class="opts" style="margin-top:8px"><button class="opt" id="mark-working">Mark as Working</button><button class="opt" id="mark-supplier">⚠️ Need confirmation to supplier</button></div>
     <label class="l">Comment — record of changing to "OK" (required)</label>
-    <textarea id="cmt">${esc(decision && decision === rec ? e.comment || "" : "")}</textarea>
+    <textarea id="cmt">${esc(tmcDone ? `Confirmed by TMC / TMNA / TME: ${tmcDone.decision}${tmcDone.note ? " — " + tmcDone.note : ""}` : decision && decision === rec ? e.comment || "" : "")}</textarea>
     ${decision === "NG" ? `<label class="l">IMDS reject comment (sent to the supplier)</label><textarea id="imdsrej">${esc(e.comment || "")}</textarea>` : ""}
-    ${override ? `<label class="l">Override justification (required)</label><textarea id="just"></textarea>` : ""}
+    ${override ? `<label class="l">Override justification (required)</label><textarea id="just">${esc(tmcDone ? `Judged after TMC / TMNA / TME confirmation (${tmcDone.decision}${tmcDone.note ? ": " + tmcDone.note : ""})` : "")}</textarea>` : ""}
     ${g && (e.status === "RECOMMEND_OK" || e.status === "RECOMMEND_NG") ? `<label class="small" style="display:block;margin-top:6px"><input type="checkbox" id="ag2" checked> Confirm for all ${g.length} identical cases</label>` : ""}
-    <button class="btn pri" id="confirm" style="margin-top:8px;width:100%" ${canFinal && decision ? "" : "disabled"}>Confirm judgment</button>
+    <button class="btn pri" id="confirm" style="margin-top:8px;width:100%" ${canFinal && decision && !tmcHeld(it) ? "" : "disabled"}>${tmcHeld(it) ? "Waiting for TMC / TMNA answer" : "Confirm judgment"}</button>
     <div class="small" style="margin-top:6px">${canFinal ? "Recorded with your name, role and the time." : `Your role (${esc(u.role)}) can set Working and Need confirmation, but only an Approver records a final OK/NG.`}</div>
   </div>`}
   <details style="margin-top:10px"><summary>Reference versions used</summary>${Object.entries(e.referenceVersions).map(([k, v]) => `<div class="small mono">${esc(k)}: ${esc(v)}</div>`).join("")}</details>
@@ -1622,6 +1805,9 @@ function setAnswer(r, key, value) {
 
 function bindDrawer(it) {
   $("#close").onclick = () => { UI.sel = null; render(); };
+  const tm = $("#tmc-mail"); if (tm) tm.onclick = () => { const t = tmcMail([it]); navigator.clipboard?.writeText(t.body); window.location.href = `mailto:?subject=${encodeURIComponent(t.subject)}&body=${encodeURIComponent(t.body)}`.slice(0, 1900); toast("E-mail drafted — the text is also on your clipboard"); };
+  const ts = $("#tmc-sent"); if (ts) ts.onclick = () => tmcSent(it);
+  const ta = $("#tmc-answer"); if (ta) ta.onclick = () => tmcAnswer(it);
   const ag = $("#ag"); if (ag) ag.onchange = () => (UI.applyGroup = ag.checked);
   document.querySelectorAll("[data-ans]").forEach((b) => (b.onclick = () => {
     const key = it.evaluation.pendingQuestion.key, value = b.dataset.ans;
@@ -1645,11 +1831,14 @@ function bindDrawer(it) {
   document.querySelectorAll("[data-dec]").forEach((b) => (b.onclick = () => { UI.decision = b.dataset.dec; render(); }));
   const c = $("#confirm"); if (c) c.onclick = () => {
     const g = GROUP_OF.get(it.key); const all = $("#ag2") && $("#ag2").checked ? g : [it];
+    if (all.some(tmcHeld)) return toast("Some of these cases still need TMC / TMNA confirmation first");
+    const dec = UI.decision || (isTmcCase(it) && tmcOf(it).status === "CONFIRMED" ? tmcOf(it).decision : null) || it.evaluation.recommendedJudge;
+    if (dec !== "OK" && dec !== "NG") return toast("Choose OK or NG first");
     const comment = $("#cmt").value, just = $("#just") ? $("#just").value : undefined;
     const imdsRej = $("#imdsrej") ? $("#imdsrej").value : "";
     try {
       for (const m of all) {
-        const entry = IMDS.approve(m.evaluation, user(), UI.decision || it.evaluation.recommendedJudge, comment, just, all.length > 1 ? it.key : undefined);
+        const entry = IMDS.approve(m.evaluation, user(), dec, comment, just, all.length > 1 ? it.key : undefined);
         entry.part = m.record.deliveryPartNo; entry.errorCategory = m.evaluation.errorCategory; entry.supplierCode = m.record.supplierCode;
         entry.judgmentType = "Manual judgment";
         if (imdsRej.trim()) entry.imdsReject = imdsRej.trim();
@@ -1715,6 +1904,10 @@ function viewSelfCheck() {
       <button class="btn" id="self-restore">⬆ Restore</button>
       <input type="file" id="self-restore-file" accept=".json" hidden>
     </div>
+    <div class="sc-switches">
+      <label><input type="checkbox" id="sw-use" ${rule("selfCheckUse") ? "checked" : ""}> Use self-check answers in the Judgment Workspace</label>
+      <label><input type="checkbox" id="sw-auto" ${rule("selfCheckAuto") ? "checked" : ""} ${rule("selfCheckUse") ? "" : "disabled"}> Judge OK automatically when the supplier's answer leads to OK</label>
+    </div>
     <div class="small" style="margin-top:8px">${q ? `${shown.length} of ${lib.length} parts match “${esc(UI.selfQ)}”` : `Everything is saved in this browser. Use <b>Backup</b> to keep a copy you can restore later or give to a colleague.`}</div>
     <div id="self-msg"></div>
   </div>
@@ -1773,7 +1966,7 @@ function viewSelfCheck() {
   if (form) {
     form.onclick = () => {
       const rec = {}; document.querySelectorAll("[data-f]").forEach((inp) => (rec[inp.dataset.f] = inp.value.trim() || null));
-      try { addManualSelfCheck(rec); UI.selfForm = null; toast("Saved to the library"); render(); }
+      try { addManualSelfCheck(rec); UI.selfForm = null; evaluateAndAutoJudge(); save(); toast("Saved to the library"); render(); }
       catch (e) { toast(e.message); }
     };
     $("#self-cancel").onclick = () => { UI.selfForm = null; render(); };
@@ -1785,14 +1978,14 @@ function viewSelfCheck() {
     for (const s of S.selfChecks) if (ids.has(s.id)) s.rows = s.rows.filter((r) => `${String(r.supplierCode || "").trim().toUpperCase()}|${r.partKeyNorm}` !== e.key);
     S.selfChecks = S.selfChecks.filter((s) => s.rows.length);
     S.audit.push({ at: new Date().toISOString(), ...user(), action: "SELFCHECK_REMOVE", detail: `${e.latest.partNo || e.latest.supplierCode} removed from the library` });
-    save(); UI.selfOpen = null; render();
+    evaluateAndAutoJudge(); save(); UI.selfOpen = null; render();
   }));
   document.querySelectorAll("[data-rmself]").forEach((b) => (b.onclick = () => {
     const sub = (S.selfChecks || []).find((s) => s.id === b.dataset.rmself);
     if (sub && !confirm(`Remove "${sub.file}" and its ${sub.rows.length} entr${sub.rows.length === 1 ? "y" : "ies"}?`)) return;
     S.selfChecks = (S.selfChecks || []).filter((s) => s.id !== b.dataset.rmself);
     S.audit.push({ at: new Date().toISOString(), ...user(), action: "SELFCHECK_REMOVE", detail: sub ? sub.file : b.dataset.rmself });
-    save(); render();
+    evaluateAndAutoJudge(); save(); render();
   }));
 
   $("#self-import").onclick = () => $("#self-file").click();
@@ -1811,9 +2004,14 @@ function viewSelfCheck() {
         importedAt: new Date().toISOString(), supplierCode: rows[0].supplierCode || "", companyName: rows[0].companyName || "",
         submittedDate: rows.map((r) => r.submissionDate).find(Boolean) || "", rows, contacts });
       S.audit.push({ at: new Date().toISOString(), ...user(), action: "SELFCHECK_IMPORT", detail: `${file.name}: ${rows.length} lines, ${contacts.length} contacts` });
-      save(); toast(`${rows.length} entr${rows.length === 1 ? "y" : "ies"} added to the library`); render();
+      evaluateAndAutoJudge();
+      const sc = ITEMS.filter((i) => i.evaluation.trace.some((t) => t.viaSelfCheck)).length;
+      save(); toast(`${rows.length} entr${rows.length === 1 ? "y" : "ies"} added to the library · ${sc} case${sc === 1 ? "" : "s"} answered from supplier sheets`); render();
     } catch (e) { msg.innerHTML = `<div class="box rec-ng" style="margin-top:8px">${esc(e.message)}</div>`; }
   };
+  const swUse = $("#sw-use"), swAuto = $("#sw-auto");
+  if (swUse) swUse.onchange = () => { S.settings.selfCheckUse = swUse.checked; S.audit.push({ at: new Date().toISOString(), ...user(), action: "RULE_CHANGE", detail: `selfCheckUse = ${swUse.checked}` }); save(); evaluateAndAutoJudge(); render(); };
+  if (swAuto) swAuto.onchange = () => { S.settings.selfCheckAuto = swAuto.checked; S.audit.push({ at: new Date().toISOString(), ...user(), action: "RULE_CHANGE", detail: `selfCheckAuto = ${swAuto.checked}` }); save(); evaluateAndAutoJudge(); render(); };
   $("#self-xlsx").onclick = async () => {
     if (!lib.length) return toast("The library is empty");
     const fields = SELF_FORM.flatMap(([, fs]) => fs);
@@ -1837,6 +2035,7 @@ function viewSelfCheck() {
       const text = await file.text();
       const mode = subs.length ? (confirm(`You already have ${subs.length} submission(s).\n\nOK = merge the backup into them\nCancel = replace everything with the backup`) ? "merge" : "replace") : "merge";
       const n = restoreSelfLibrary(text, mode);
+      evaluateAndAutoJudge(); save();
       toast(`${n} submission(s) ${mode === "replace" ? "restored" : "merged"}`); render();
     } catch (e) { $("#self-msg").innerHTML = `<div class="box rec-ng" style="margin-top:8px">${esc(e.message)}</div>`; }
   };
@@ -1892,9 +2091,9 @@ const ordinal = (n) => ["", "1st", "2nd", "3rd"][n] || `${n}th`;
 function errorSentence(cat, cases, q) {
   const cas = [...new Set(cases.map((c) => c.record.cas).filter(Boolean))];
   const casList = cas.join(", ");
-  const overLimit = cases.some((c) => c.record.contentPct != null && c.record.contentPct > 0.1);
+  const overLimit = cases.some(isOverLimit);
   if (/prohibited substance/i.test(cat) && cas.length) {
-    return `These part numbers contain substance with CAS No. ${casList} that is considered as potential prohibited substance ${overLimit ? "and more than 0.1wt%" : "and needs to be declared in IMDS"}. \nTherefore, please inform substance breakdown information and confirm whether:`;
+    return `These part numbers contain substance with CAS No. ${casList} that is considered as potential prohibited substance ${overLimit ? "and more than 0.1wt%" : "and needs to be declared in IMDS"}.\nTherefore, please inform substance breakdown information and confirm whether:`;
   }
   if (/mass tolerance/i.test(cat)) {
     return `For these part numbers, the mass information submitted in IMDS is outside the drawing mass tolerance range.\nTherefore, please inform the actual mass of the part number and confirm whether mass weight inputted in IMDS is:`;
@@ -1910,16 +2109,38 @@ function errorSentence(cat, cases, q) {
   }
   return `${q || "These part numbers need your confirmation."}\nTherefore, please confirm whether:`;
 }
+const titleCase = (s) => String(s || "").replace(/\w\S*/g, (w) => w[0].toUpperCase() + w.slice(1).toLowerCase());
+/** A prohibited-substance case is "over limit" when the declared content is above 0.1 wt%. */
+const isOverLimit = (it) => it.record.contentPct != null && it.record.contentPct > 0.1;
+/** The A/B answers we ask the supplier for — the same wording as the Outlook template. */
+function errorOptions(cat, cases, q) {
+  if (/prohibited substance/i.test(cat)) {
+    return cases.some(isOverLimit)
+      ? ["A. Input Mistake (Then we will judge NG, and resubmit the correct substance info / substance % content)",
+         "B. It contains (More than 0,1%wt)"]
+      : ["A. Substance remain in final product (if you confirm A, then we will judge OK)",
+         "B. Input mistake (if you confirm B, then we will judge NG and you need to resubmit IMDS with correct substance information)"];
+  }
+  if (/mass tolerance/i.test(cat)) {
+    return ["A. Actual / calculated mass (if you confirm A, then we will judge OK)",
+            "B. Input mistake (if you confirm B, then we will judge NG and you need to resubmit IMDS with correct mass weight)"];
+  }
+  if (q && q.options && q.options.length) return q.options.map((o) => o.label);
+  return ["A. Input mistake (then we will judge NG, and you need to resubmit the correct information)",
+          "B. Confirmed as submitted (then we will judge based on the confirmed information)"];
+}
 /** Build the follow-up e-mail from the supplier's actual open cases. */
 function followUpTemplate(key, cases) {
   const [code, company] = key.split("|");
   const pic = user().user === "unnamed" ? "[your name]" : user().user;
   const title = S.settings.picTitle || "Material Engineering - TMMIN";
-  // group by error category + the exact question, so two different questions become two errors
+  // group by error category + the exact question (+ over/under 0.1 wt% for prohibited substances),
+  // so two different questions become two separate "Error n" blocks
   const groups = new Map();
   for (const it of cases) {
     const q = it.evaluation.pendingQuestion;
-    const gk = `${it.evaluation.errorCategory}||${q ? q.question : (flagOf(it) || {}).comment || ""}`;
+    const variant = /prohibited substance/i.test(it.evaluation.errorCategory) ? (isOverLimit(it) ? "over" : "declare") : "";
+    const gk = `${it.evaluation.errorCategory}||${variant}||${q ? q.question : (flagOf(it) || {}).comment || ""}`;
     if (!groups.has(gk)) groups.set(gk, { cat: it.evaluation.errorCategory, q, cases: [] });
     groups.get(gk).cases.push(it);
   }
@@ -1928,12 +2149,10 @@ function followUpTemplate(key, cases) {
   for (const g of groups.values()) {
     n++;
     const parts = [...new Set(g.cases.map((c) => c.record.deliveryPartNo).filter(Boolean))];
-    body += `\nError ${n} : ${g.cat}\nPart Number :\n`;
+    body += `\nError ${n} : ${titleCase(g.cat)}\nPart Number :\n`;
     parts.forEach((p, i) => { body += `   ${i + 1}. ${p}\n`; });
     body += `\n${errorSentence(g.cat, g.cases, g.q && g.q.question)}\n`;
-    const opts = g.q && g.q.options ? g.q.options : [];
-    if (opts.length) opts.forEach((o) => { body += `${o.label}\n`; });
-    else body += `A. Input mistake (then we will judge NG, and you need to resubmit the correct information)\nB. Confirmed as submitted (then we will judge based on the confirmed information)\n`;
+    errorOptions(g.cat, g.cases, g.q).forEach((o) => { body += `${o}\n`; });
   }
   body += `\nWe look forward for your feedback.\nThank you for your support.\n\nBest Regards,\n${pic}\n${title}`;
   const subject = `IMDS Submission - Confirmation Needed (${code}${company ? " " + company : ""}) - ${n} error${n === 1 ? "" : "s"}`;
@@ -1956,100 +2175,160 @@ function resubmitTemplate(key, cases) {
   return { subject: `IMDS Resubmission Required (${code}${company ? " " + company : ""}) - ${cases.length} part${cases.length === 1 ? "" : "s"}`, body };
 }
 
-function viewSupplier() {
-  const open = supplierOpen();
+/** Follow-up / resubmission numbers, shared by the Supplier screen and the Overview. */
+function fuStats() {
+  const open = supplierOpen(), keys = Object.keys(open);
   const resub = resubmitCases();
+  const resubDone = resub.filter((it) => (S.resubmits[it.key] || {}).status === "RESUBMITTED").length;
+  return {
+    open, keys, resub,
+    need: keys.filter((k) => fuOf(k).status === "NEED").length,
+    sent: keys.filter((k) => fuOf(k).status === "SENT").length,
+    replied: keys.filter((k) => fuOf(k).status === "REPLIED").length,
+    resubDone, awaiting: resub.length - resubDone,
+    tmcCases: ITEMS.filter(isTmcCase),
+    tmcNeed: ITEMS.filter((i) => isTmcCase(i) && tmcOf(i).status === "NEED").length,
+    tmcSent: ITEMS.filter((i) => isTmcCase(i) && tmcOf(i).status === "SENT").length,
+    tmcDone: ITEMS.filter((i) => isTmcCase(i) && tmcOf(i).status === "CONFIRMED").length,
+    accepted: ITEMS.filter((it) => { const f = finalOf(it); return f && f.newStatus === "FINAL_OK"; }).length,
+  };
+}
+
+function viewSupplier() {
+  const st = fuStats(), { open, keys, resub, need, sent, replied, awaiting } = st;
   const resubBySup = {}; resub.forEach((it) => ((resubBySup[supKey(it.record)] ||= []).push(it)));
-  const tab = UI.fuTab || "open";
-  const keys = Object.keys(open).sort();
-  const need = keys.filter((k) => fuOf(k).status === "NEED").length;
-  const sent = keys.filter((k) => fuOf(k).status === "SENT").length;
-  const replied = keys.filter((k) => fuOf(k).status === "REPLIED").length;
-  const awaiting = resub.filter((it) => (S.resubmits[it.key] || {}).status !== "RESUBMITTED").length;
-  const done = resub.length - awaiting;
-  const pill = (k) => { const f = fuOf(k); return `<span class="tag ${f.status === "NEED" ? "t-wait" : f.status === "SENT" ? "t-route" : "t-ok"}">${f.status === "NEED" ? "⚠️ " : ""}${FU_LABEL[f.status]}${f.round ? ` · ${ordinal(f.round)}` : ""}</span>`; };
+  const tab = UI.fuTab || "open", fs = UI.fuStatus || "all", rf = UI.fuRs || "awaiting", q = (UI.fuQ || "").trim().toLowerCase();
+  const matchQ = (key, list) => !q || key.toLowerCase().includes(q) || list.some((it) => String(it.record.deliveryPartNo || "").toLowerCase().includes(q));
+  const pill = (k) => { const f = fuOf(k); return `<span class="tag ${f.status === "NEED" ? "t-wait" : f.status === "SENT" ? "t-route" : "t-ok"}">${FU_LABEL[f.status]}${f.round ? ` · ${ordinal(f.round)}` : ""}</span>`; };
+  // Need follow-up -> Already followed up -> Supplier replied
+  const flow = (k) => { const cur = fuOf(k).status, i = ["NEED", "SENT", "REPLIED"].indexOf(cur);
+    return `<ol class="fu-flow" aria-label="Follow-up progress">${["NEED", "SENT", "REPLIED"].map((s, n) => `<li class="${n < i ? "done" : ""}${n === i ? " cur" : ""}"><i>${n < i ? "✓" : n + 1}</i>${FU_LABEL[s]}</li>`).join("")}</ol>`; };
+  const chip = (attr, val, label, n, on) => `<button class="chip ${on ? "on" : ""}" ${attr}="${val}">${label}${n === undefined ? "" : `<i>${n}</i>`}</button>`;
 
   $("#main").innerHTML = header("SUPPLIER / FOLLOW-UP", "Supplier Follow-up",
-    "Everything waiting on a supplier: open questions with a ready-to-send e-mail, and parts rejected in IMDS that need resubmitting.") + `
-  <div class="kpis">
-    <button class="kpi y" data-fu="open"><span>⚠️ Need follow-up</span><b>${need}</b><em>supplier${need === 1 ? "" : "s"} not contacted yet</em></button>
-    <button class="kpi b" data-fu="open"><span>Already followed up</span><b>${sent}</b><em>waiting for their answer</em></button>
-    <button class="kpi g" data-fu="open"><span>Supplier replied</span><b>${replied}</b><em>answer recorded in the Workspace</em></button>
-    <button class="kpi r" data-fu="resubmit"><span>Awaiting IMDS resubmission</span><b>${awaiting}</b><em>${done} already resubmitted</em></button>
+    "Track every supplier we are waiting on — who still needs a follow-up, who has been contacted, who replied — and which rejected parts still need an IMDS resubmission.") + `
+  <div class="kpis fu-kpis">
+    <button class="kpi y" data-fu="open" data-fs="NEED"><span>Need follow-up</span><b>${need}</b><em>supplier${need === 1 ? "" : "s"} not contacted yet</em></button>
+    <button class="kpi b" data-fu="open" data-fs="SENT"><span>Already followed up</span><b>${sent}</b><em>waiting for their answer</em></button>
+    <button class="kpi g" data-fu="open" data-fs="REPLIED"><span>Supplier replied</span><b>${replied}</b><em>answer recorded in the Workspace</em></button>
+    <button class="kpi p" data-fu="tmc"><span>Waiting for TMC / TMNA</span><b>${st.tmcNeed + st.tmcSent}</b><em>${st.tmcNeed} to send · ${st.tmcSent} sent${st.tmcDone ? ` · ${st.tmcDone} answered` : ""}</em></button>
+    <button class="kpi r" data-fu="resubmit" data-rs="awaiting"><span>Awaiting IMDS resubmission</span><b>${awaiting}</b><em>${st.resubDone} of ${resub.length} resubmitted</em></button>
   </div>
-  <div class="chips" style="margin:0 0 14px">
-    <button class="chip ${tab === "open" ? "on" : ""}" data-fu="open">Open questions<i>${keys.length}</i></button>
-    <button class="chip ${tab === "resubmit" ? "on" : ""}" data-fu="resubmit">Rejected — needs resubmission<i>${resub.length}</i></button>
-    <button class="chip ${tab === "settings" ? "on" : ""}" data-fu="settings">E-mail signature</button>
+  <div class="fu-bar">
+    <div class="chips" style="margin:0">
+      ${chip("data-fu", "open", "Open questions", keys.length, tab === "open")}
+      ${chip("data-fu", "tmc", "TMC / TMNA confirmation", st.tmcCases.length, tab === "tmc")}
+      ${chip("data-fu", "resubmit", "Rejected — resubmission tracker", resub.length, tab === "resubmit")}
+      ${chip("data-fu", "settings", "E-mail signature", undefined, tab === "settings")}
+    </div>
+    ${tab !== "settings" ? `<input id="fu-q" type="search" class="fu-search" placeholder="Search supplier, code or part number" value="${esc(UI.fuQ || "")}" aria-label="Search suppliers">` : ""}
   </div>` + (
 
   tab === "settings" ? `
   <div class="card w" style="max-width:640px"><h3>E-mail signature</h3>
-    <p class="hint">Used at the top and bottom of every generated follow-up. Your name comes from the sidebar.</p>
+    <p class="hint">Used at the top and bottom of every generated e-mail. Your name comes from the sidebar.</p>
     <label class="l">Your name (from the sidebar)</label><div class="mono">${esc(user().user === "unnamed" ? "— not set —" : user().user)}</div>
     <label class="l">Division / title</label><input id="pic-title" class="btn" style="width:100%" value="${esc(S.settings.picTitle || "Material Engineering - TMMIN")}">
     <button class="btn pri" id="pic-save" style="margin-top:10px">Save</button>
   </div>`
 
-  : tab === "resubmit" ? (
-    resub.length ? Object.entries(resubBySup).sort().map(([key, list]) => {
-      const [code, company] = key.split("|");
-      const left = list.filter((it) => (S.resubmits[it.key] || {}).status !== "RESUBMITTED").length;
-      return `<div class="card w" style="margin-bottom:12px">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
-          <div><h3 style="margin:0">${esc(company || "—")}</h3><div class="small mono">${esc(code)}${supplierEmail(code) ? " · " + esc(supplierEmail(code)) : ""}</div></div>
-          <div><span class="tag ${left ? "t-ng" : "t-ok"}">${left ? `${left} awaiting resubmission` : "all resubmitted"}</span></div>
-        </div>
-        <table style="margin-top:12px"><thead><tr><th>Part number</th><th>Error</th><th>CAS / substance</th><th>Our reject comment</th><th>Status</th><th></th></tr></thead><tbody>
-        ${list.map((it) => { const f = finalOf(it) || {}, rs = S.resubmits[it.key] || {};
-          return `<tr><td class="mono"><button class="btn" data-goreg2="${esc(it.key)}" style="padding:2px 8px">${esc(it.record.deliveryPartNo || "—")}</button></td>
-          <td class="small">${esc(it.evaluation.errorCategory)}</td>
-          <td class="small mono">${esc(it.record.cas || "—")}<div class="small">${esc((it.record.substanceName || "").slice(0, 28))}</div></td>
-          <td class="small">${esc(f.imdsReject || f.comment || "—")}</td>
-          <td>${rs.status === "RESUBMITTED" ? `<span class="tag t-ok">Resubmitted</span><div class="small">${esc(rs.user || "")} · ${esc((rs.at || "").slice(0, 10))}</div>` : `<span class="tag t-ng">Awaiting</span>`}</td>
-          <td>${rs.status === "RESUBMITTED" ? `<button class="btn" data-unresub="${esc(it.key)}">Undo</button>` : `<button class="btn" data-resub="${esc(it.key)}">Mark resubmitted</button>`}</td></tr>`; }).join("")}
-        </tbody></table>
-        <div class="tools" style="margin-top:12px"><button class="btn pri" data-rmail="${esc(key)}">✉ Open resubmission e-mail</button><button class="btn" data-rcopy="${esc(key)}">Copy text</button></div>
-        <div id="rbox-${esc(key.replace(/[^a-z0-9]/gi, ""))}"></div>
-      </div>`; }).join("")
-    : `<div class="card empty"><div class="big">${ICO.inn}</div><h3>Nothing rejected</h3><p>Parts judged NG appear here with their reject comment, so you can track who still has to resubmit their IMDS entry.</p></div>`)
+  : tab === "tmc" ? (() => {
+      const list = st.tmcCases.filter((it) => !q || [it.record.deliveryPartNo, it.record.supplierCode, it.record.companyName].join(" ").toLowerCase().includes(q));
+      if (!list.length) return `<div class="card empty"><div class="big">${ICO.inn}</div><h3>${st.tmcCases.length ? "Nothing in this view" : "Nothing to confirm with TMC"}</h3><p>When an Appendix II flow ends in “Contact to TMC / TMNA / TME / TDEM”, the case is held here. A final OK / NG can only be recorded after their answer is logged.</p></div>`;
+      const flowOf = (t) => { const i = ["NEED", "SENT", "CONFIRMED"].indexOf(t.status); return `<ol class="fu-flow">${["NEED", "SENT", "CONFIRMED"].map((x, n) => `<li class="${n < i ? "done" : ""}${n === i ? " cur" : ""}"><i>${n < i ? "✓" : n + 1}</i>${TMC_LABEL[x]}</li>`).join("")}</ol>`; };
+      const todo = list.filter((it) => tmcOf(it).status !== "CONFIRMED");
+      return `<div class="card w fu-card"><div class="fu-head"><div><h3>TMC / TMNA / TME / TDEM confirmation</h3><div class="small">${todo.length} case${todo.length === 1 ? "" : "s"} still to send or waiting for an answer · judgement is on hold until TMC answers</div></div>
+        <div class="tools"><button class="btn pri" data-tmcmail-all ${todo.length ? "" : "disabled"}>✉ Draft one e-mail for ${todo.length} case${todo.length === 1 ? "" : "s"}</button></div></div>
+        <div class="fu-tablewrap"><table class="fu-table"><thead><tr><th>Part number</th><th>Supplier</th><th>Why it was escalated</th><th>Progress</th><th></th></tr></thead><tbody>
+        ${list.map((it) => { const t = tmcOf(it), sc = (it.evaluation.trace || []).find((x) => x.viaSelfCheck);
+          return `<tr><td class="mono"><button class="linkbtn" data-goreg2="${esc(it.key)}">${esc(it.record.deliveryPartNo || "—")}</button><div class="small">${esc(it.evaluation.errorCategory)}</div></td>
+          <td class="small">${esc(it.record.supplierCode || "—")}<div>${esc((it.record.companyName || "").slice(0, 30))}</div></td>
+          <td class="small fu-note">${esc(it.evaluation.comment || (it.evaluation.reasons || [])[0] || "")}${sc ? `<div><span class="tag t-route">supplier self-check</span> ${esc(sc.viaSelfCheck.why)}</div>` : ""}</td>
+          <td>${flowOf(t)}${t.status === "CONFIRMED" ? `<div><span class="tag ${t.decision === "OK" ? "t-ok" : "t-ng"}">TMC says ${esc(t.decision)}</span></div>` : ""}${t.at && t.status !== "NEED" ? `<div class="small">${esc(t.user)} · ${esc(t.at.replace("T", " ").slice(0, 16))}${t.note ? " — " + esc(t.note) : ""}</div>` : ""}</td>
+          <td style="white-space:nowrap">${t.status === "NEED" ? `<button class="btn sm" data-tmcsent="${esc(it.key)}">Mark sent</button> ` : ""}${t.status !== "CONFIRMED" ? `<button class="btn sm" data-tmcans="${esc(it.key)}">Record TMC's answer</button>` : `<button class="btn sm" data-goreg2="${esc(it.key)}">Judge now</button> <button class="btn sm ghost" data-tmcreset="${esc(it.key)}">Undo</button>`}</td></tr>`; }).join("")}
+        </tbody></table></div></div>`; })()
 
-  : (keys.length ? keys.map((key) => {
-      const list = open[key], [code, company] = key.split("|"), f = fuOf(key);
-      const tpl = followUpTemplate(key, list);
-      const email = supplierEmail(code);
-      const id = key.replace(/[^a-z0-9]/gi, "");
-      return `<div class="card w" style="margin-bottom:12px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
-        <div><h3 style="margin:0">${esc(company || "—")}</h3>
-          <div class="small mono">${esc(code)}${email ? " · " + esc(email) : ""}</div>
-          <div class="small">${tpl.parts} part number${tpl.parts === 1 ? "" : "s"} · ${tpl.groups} error group${tpl.groups === 1 ? "" : "s"} · ${list.length} open case${list.length === 1 ? "" : "s"}</div></div>
-        <div style="text-align:right">${pill(key)}
-          ${f.at ? `<div class="small">${esc(f.user || "")} · ${esc(f.at.replace("T", " ").slice(0, 16))}</div>` : ""}
-          ${f.note ? `<div class="small">${esc(f.note)}</div>` : ""}</div>
-      </div>
-      <table style="margin-top:12px"><thead><tr><th>Part number</th><th>Error</th><th>CAS</th><th>What we asked</th></tr></thead><tbody>
-      ${list.slice(0, 8).map((it) => `<tr class="row" data-k="${esc(it.key)}"><td class="mono">${esc(it.record.deliveryPartNo || "—")}</td>
-        <td class="small">${esc(it.evaluation.errorCategory)}</td><td class="mono small">${esc(it.record.cas || "—")}</td>
-        <td class="small">${esc(it.evaluation.pendingQuestion ? it.evaluation.pendingQuestion.question : (flagOf(it) || {}).comment || it.evaluation.reasons[0] || "")}</td></tr>`).join("")}
-      ${list.length > 8 ? `<tr><td colspan="4" class="small">+ ${list.length - 8} more — all of them are in the e-mail</td></tr>` : ""}
-      </tbody></table>
-      <div class="tools" style="margin-top:12px">
-        <button class="btn pri" data-mail="${esc(key)}">✉ Open in Outlook</button>
-        <button class="btn" data-copy="${esc(key)}">Copy e-mail text</button>
-        <button class="btn" data-preview="${esc(key)}">${UI.fuOpen === key ? "Hide" : "Preview"} template</button>
-        ${f.status !== "SENT" ? `<button class="btn" data-sent="${esc(key)}">Mark as followed up</button>` : ""}
-        ${f.status === "SENT" ? `<button class="btn" data-replied="${esc(key)}">Supplier replied</button>` : ""}
-        ${f.status !== "NEED" ? `<button class="btn" data-reset="${esc(key)}">Reset to need follow-up</button>` : ""}
-      </div>
-      ${UI.fuOpen === key ? `<label class="l">Subject</label><input class="btn" style="width:100%" readonly value="${esc(tpl.subject)}">
-        <label class="l">Message</label><textarea readonly style="min-height:320px;font-family:var(--mono);font-size:12px">${esc(tpl.body)}</textarea>` : ""}
-      <div id="mbox-${esc(id)}"></div>
-    </div>`; }).join("")
-    : `<div class="card empty"><div class="big">${ICO.inn}</div><h3>Nothing waiting on a supplier</h3><p>When the engine needs a supplier to confirm something, or you mark a case "Need confirmation to supplier", it appears here with a ready-to-send e-mail.</p></div>`));
+  : tab === "resubmit" ? (
+    `<div class="chips" style="margin:0 0 12px">
+      ${chip("data-rs", "awaiting", "Awaiting resubmission", st.awaiting, rf === "awaiting")}
+      ${chip("data-rs", "done", "Resubmitted", st.resubDone, rf === "done")}
+      ${chip("data-rs", "all", "All rejected", resub.length, rf === "all")}
+    </div>` + (() => {
+      const cards = Object.entries(resubBySup).sort().map(([key, all]) => {
+        const list = all.filter((it) => { const d = (S.resubmits[it.key] || {}).status === "RESUBMITTED"; return rf === "all" || (rf === "done" ? d : !d); });
+        if (!list.length || !matchQ(key, list)) return "";
+        const [code, company] = key.split("|");
+        const left = all.filter((it) => (S.resubmits[it.key] || {}).status !== "RESUBMITTED").length;
+        return `<div class="card w fu-card">
+        <div class="fu-head">
+          <div><h3>${esc(company || "—")}</h3><div class="small mono">${esc(code)}${supplierEmail(code) ? " · " + esc(supplierEmail(code)) : ""}</div></div>
+          <span class="tag ${left ? "t-ng" : "t-ok"}">${left ? `${left} of ${all.length} awaiting resubmission` : `all ${all.length} resubmitted`}</span>
+        </div>
+        <div class="fu-tablewrap"><table class="fu-table"><thead><tr><th>Part number</th><th>Error</th><th>CAS / substance</th><th>IMDS module</th><th>Our reject comment</th><th>Status</th><th></th></tr></thead><tbody>
+        ${list.map((it) => { const f = finalOf(it) || {}, rs = S.resubmits[it.key] || {}, done = rs.status === "RESUBMITTED";
+          return `<tr><td class="mono"><button class="linkbtn" data-goreg2="${esc(it.key)}" title="Open in Judgment Workspace">${esc(it.record.deliveryPartNo || "—")}</button></td>
+          <td class="small">${esc(it.evaluation.errorCategory)}</td>
+          <td class="small"><span class="mono">${esc(it.record.cas || "—")}</span>${it.record.substanceName ? `<div>${esc(String(it.record.substanceName).split("\n")[0].slice(0, 36))}</div>` : ""}</td>
+          <td class="small mono">${esc(it.record.moduleId || "—")}${it.record.moduleVersion ? ` / v${esc(it.record.moduleVersion)}` : ""}</td>
+          <td class="small fu-note">${esc(f.imdsReject || f.comment || "—")}</td>
+          <td>${done ? `<span class="tag t-ok">Resubmitted</span><div class="small">${esc(rs.user || "")} · ${esc((rs.at || "").slice(0, 10))}</div>${rs.note ? `<div class="small">${esc(rs.note)}</div>` : ""}` : `<span class="tag t-ng">Awaiting</span>`}</td>
+          <td>${done ? `<button class="btn sm" data-unresub="${esc(it.key)}">Undo</button>` : `<button class="btn sm" data-resub="${esc(it.key)}">Mark resubmitted</button>`}</td></tr>`; }).join("")}
+        </tbody></table></div>
+        <div class="tools fu-actions"><button class="btn pri" data-rmail="${esc(key)}">✉ Open resubmission e-mail</button><button class="btn" data-rcopy="${esc(key)}">Copy text</button></div>
+      </div>`; }).join("");
+      return cards || `<div class="card empty"><div class="big">${ICO.inn}</div><h3>${resub.length ? "Nothing in this view" : "Nothing rejected"}</h3><p>${resub.length ? "Try another filter or clear the search." : "Parts judged NG appear here with their reject comment, so you can track who still has to resubmit their IMDS entry."}</p></div>`;
+    })())
+
+  : `<div class="chips" style="margin:0 0 12px">
+      ${chip("data-fs", "all", "All", keys.length, fs === "all")}
+      ${chip("data-fs", "NEED", "Need follow-up", need, fs === "NEED")}
+      ${chip("data-fs", "SENT", "Already followed up", sent, fs === "SENT")}
+      ${chip("data-fs", "REPLIED", "Supplier replied", replied, fs === "REPLIED")}
+    </div>` + (() => {
+      const cards = keys.filter((k) => (fs === "all" || fuOf(k).status === fs) && matchQ(k, open[k])).map((key) => {
+        const list = open[key], [code, company] = key.split("|"), f = fuOf(key);
+        const tpl = followUpTemplate(key, list), email = supplierEmail(code), id = key.replace(/[^a-z0-9]/gi, "");
+        return `<div class="card w fu-card">
+        <div class="fu-head">
+          <div><h3>${esc(company || "—")}</h3>
+            <div class="small mono">${esc(code)}${email ? " · " + esc(email) : ""}</div>
+            <div class="small">${tpl.parts} part number${tpl.parts === 1 ? "" : "s"} · ${tpl.groups} error${tpl.groups === 1 ? "" : "s"} · ${list.length} open case${list.length === 1 ? "" : "s"}</div></div>
+          <div class="fu-state">${pill(key)}${f.at ? `<div class="small">${esc(f.user || "")} · ${esc(f.at.replace("T", " ").slice(0, 16))}</div>` : ""}${f.note ? `<div class="small">${esc(f.note)}</div>` : ""}</div>
+        </div>
+        ${flow(key)}
+        <div class="fu-tablewrap"><table class="fu-table"><thead><tr><th>Part number</th><th>Error</th><th>CAS</th><th>What we asked</th></tr></thead><tbody>
+        ${list.slice(0, 8).map((it) => `<tr class="row" data-k="${esc(it.key)}"><td class="mono">${esc(it.record.deliveryPartNo || "—")}</td>
+          <td class="small">${esc(it.evaluation.errorCategory)}</td><td class="mono small">${esc(it.record.cas || "—")}</td>
+          <td class="small fu-note">${esc(it.evaluation.pendingQuestion ? it.evaluation.pendingQuestion.question : (flagOf(it) || {}).comment || it.evaluation.reasons[0] || "")}</td></tr>`).join("")}
+        ${list.length > 8 ? `<tr><td colspan="4" class="small">+ ${list.length - 8} more — all of them are in the e-mail</td></tr>` : ""}
+        </tbody></table></div>
+        <div class="tools fu-actions">
+          <button class="btn pri" data-mail="${esc(key)}">✉ Open in Outlook</button>
+          <button class="btn" data-copy="${esc(key)}">Copy e-mail text</button>
+          <button class="btn" data-preview="${esc(key)}">${UI.fuOpen === key ? "Hide" : "Preview"} template</button>
+          <span class="fu-spacer"></span>
+          ${f.status !== "SENT" ? `<button class="btn" data-sent="${esc(key)}">Mark as followed up</button>` : ""}
+          ${f.status === "SENT" ? `<button class="btn" data-replied="${esc(key)}">Supplier replied</button>` : ""}
+          ${f.status !== "NEED" ? `<button class="btn ghost" data-reset="${esc(key)}">Reset</button>` : ""}
+        </div>
+        ${(f.history || []).length > 1 ? `<details class="fu-hist"><summary>Follow-up history (${f.history.length})</summary>${f.history.slice().reverse().map((h) => `<div class="small">${esc(h.at.replace("T", " ").slice(0, 16))} · ${esc(h.user || "")} · ${esc(FU_LABEL[h.status] || h.status)}${h.note ? " — " + esc(h.note) : ""}</div>`).join("")}</details>` : ""}
+        ${UI.fuOpen === key ? `<label class="l">Subject</label><input class="btn" style="width:100%" readonly value="${esc(tpl.subject)}">
+          <label class="l">Message</label><textarea readonly class="fu-mail">${esc(tpl.body)}</textarea>` : ""}
+        <div id="mbox-${esc(id)}"></div>
+      </div>`; }).join("");
+      return cards || `<div class="card empty"><div class="big">${ICO.inn}</div><h3>${keys.length ? "Nothing in this view" : "Nothing waiting on a supplier"}</h3><p>${keys.length ? "Try another status or clear the search." : `When the engine needs a supplier to confirm something, or you mark a case "Need confirmation to supplier", it appears here with a ready-to-send e-mail.`}</p></div>`;
+    })());
 
   // ---- wiring ----
-  document.querySelectorAll("[data-fu]").forEach((b) => (b.onclick = () => { UI.fuTab = b.dataset.fu; UI.fuOpen = null; render(); }));
+  document.querySelectorAll("[data-fu]").forEach((b) => (b.onclick = () => {
+    UI.fuTab = b.dataset.fu; UI.fuOpen = null;
+    if (b.dataset.fs) UI.fuStatus = b.dataset.fs; else if (b.classList.contains("chip")) UI.fuStatus = "all";
+    if (b.dataset.rs) UI.fuRs = b.dataset.rs;
+    render();
+  }));
+  document.querySelectorAll("[data-fs]:not([data-fu])").forEach((b) => (b.onclick = () => { UI.fuStatus = b.dataset.fs; UI.fuOpen = null; render(); }));
+  document.querySelectorAll("[data-rs]:not([data-fu])").forEach((b) => (b.onclick = () => { UI.fuRs = b.dataset.rs; render(); }));
+  const fq = $("#fu-q"); if (fq) fq.oninput = () => { UI.fuQ = fq.value; const p = fq.selectionStart; render(); const n = $("#fu-q"); n.focus(); n.setSelectionRange(p, p); };
   document.querySelectorAll("tr.row").forEach((tr) => (tr.onclick = () => { UI.view = "register"; UI.sel = tr.dataset.k; render(); }));
   document.querySelectorAll("[data-goreg2]").forEach((b) => (b.onclick = () => { UI.view = "register"; UI.sel = b.dataset.goreg2; render(); }));
   document.querySelectorAll("[data-preview]").forEach((b) => (b.onclick = () => { UI.fuOpen = UI.fuOpen === b.dataset.preview ? null : b.dataset.preview; render(); }));
@@ -2073,6 +2352,17 @@ function viewSupplier() {
   document.querySelectorAll("[data-reset]").forEach((b) => (b.onclick = () => setFollowUp(b.dataset.reset, "NEED", "")));
   document.querySelectorAll("[data-resub]").forEach((b) => (b.onclick = () => { const n = prompt("Note (optional) — new module ID / version?", ""); if (n === null) return; setResubmit(b.dataset.resub, "RESUBMITTED", n); }));
   document.querySelectorAll("[data-unresub]").forEach((b) => (b.onclick = () => setResubmit(b.dataset.unresub, null)));
+  const byKey = (k) => ITEMS.find((i) => i.key === k);
+  document.querySelectorAll("[data-tmcsent]").forEach((b) => (b.onclick = () => tmcSent(byKey(b.dataset.tmcsent))));
+  document.querySelectorAll("[data-tmcans]").forEach((b) => (b.onclick = () => tmcAnswer(byKey(b.dataset.tmcans))));
+  document.querySelectorAll("[data-tmcreset]").forEach((b) => (b.onclick = () => setTmc(byKey(b.dataset.tmcreset), null)));
+  const tma = document.querySelector("[data-tmcmail-all]"); if (tma) tma.onclick = () => {
+    const todo = st.tmcCases.filter((it) => tmcOf(it).status !== "CONFIRMED"), t = tmcMail(todo);
+    navigator.clipboard?.writeText(t.body); window.location.href = `mailto:?subject=${encodeURIComponent(t.subject)}&body=${encodeURIComponent(t.body)}`.slice(0, 1900);
+    toast("E-mail drafted — the full text is on your clipboard");
+    todo.filter((it) => tmcOf(it).status === "NEED").forEach((it) => { S.tmc[it.key] = { status: "SENT", decision: null, note: "E-mail drafted", at: new Date().toISOString(), user: user().user, role: user().role, history: [] }; });
+    S.audit.push({ at: new Date().toISOString(), ...user(), action: "TMC_SENT", detail: `${todo.length} case(s) drafted in one e-mail` }); save(); render();
+  };
   const ps = $("#pic-save"); if (ps) ps.onclick = () => { S.settings.picTitle = $("#pic-title").value.trim(); save(); toast("Signature saved"); render(); };
 }
 
@@ -2291,6 +2581,65 @@ function restoreSelfLibrary(text, mode) {
   return incoming.length;
 }
 
+
+/** What a supplier's self-check sheet already tells us, expressed as an answer to one of the
+ *  engine's supplier questions. Returns null unless the sheet is clear — never guesses. */
+const SC_RX = {
+  notContain: /\b(does|do|did)\s*not\s*contain|\bno\s+longer\s+contain|\bnot\s+(present|used|included)|tidak\s+(mengandung|terkandung|ada|digunakan|dipakai)/gi,
+  mistake: /input\s*(mistake|error)|(wrong|incorrect|mistaken)\s*(input|entry|data|value|mass)|\btypo\b|\bmistake\b|human\s*error|salah\s*(input|isi|ketik|data)|kesalahan|keliru/i,
+  contains: /\bremain(s|ed|ing)?\b|\bstill\s+(contain|exist|present|used)|\bcontain(s|ed|ing)?\b|\b(is|are)\s+(used|included|present)|terkandung|mengandung|masih\s+(ada|terdapat|digunakan|dipakai)|tetap\s+ada|digunakan|dipakai|tidak\s+(dapat|bisa)\s+(dihilangkan|dihindari)/i,
+  nonIntentional: /non[\s-]*intentional|un[\s-]*intentional|impurit|contaminat|trace\s+amount|residual|tidak\s+(sengaja|disengaja)|pengotor|residu/gi,
+  intentional: /intentional|deliberate|\badded\b|additive|\bsengaja|ditambah/i,
+  actual: /\bactual\b|calculat|measured|weigh|aktual|hitung|timbang|ukur/i,
+  machining: /machin|free[\s-]*cutting|bubut|pemesinan/i,
+};
+const scNum = (v) => { if (v == null) return NaN; const n = parseFloat(String(v).replace(",", ".").replace(/[^0-9.\-]/g, "")); return n; };
+const scCas = (v) => String(v || "").replace(/[^0-9]/g, "");
+function selfCheckSuggest(r, node) {
+  let lines = selfChecksForPart(r.deliveryPartNo).filter((x) => !x.supplierCode || !r.supplierCode || String(x.supplierCode).trim() === String(r.supplierCode).trim());
+  if (!lines.length) return null;
+  // the library keeps older versions of a part; only the newest submission counts
+  const when = (x) => String(x._sub.submittedDate || x.submissionDate || x._sub.importedAt || "");
+  const newest = lines.reduce((a, x) => (when(x) > when(a) || (when(x) === when(a) && String(x._sub.importedAt) > String(a._sub.importedAt)) ? x : a), lines[0])._sub.id;
+  lines = lines.filter((x) => x._sub.id === newest);
+  if (r.cas) { const same = lines.filter((x) => scCas(x.cas) === scCas(r.cas)); if (same.length) lines = same; }
+  const text = lines.map((x) => [x.explanation, x.materialRemarks, x.purpose].filter(Boolean).join(" ")).join(" | ").replace(/\s+/g, " ").trim();
+  const src = lines[0], quote = (text || "").slice(0, 160);
+  const mk = (value, why) => ({ value, why, quote: text ? quote : "", sheet: src._sub && src._sub.file, supplier: src.companyName || src.supplierCode, line: src.no });
+  const k = node.key || "";
+  const neg = (t) => { const clean = t.replace(SC_RX.notContain, " "); return { hadNot: clean !== t, clean }; };
+  if (k === "supplier:sms" || k === "supplier:mass") {
+    const im = scNum(r.deliveryMass ?? r.componentMassA), ac = scNum(src.actualMass);
+    if (text && SC_RX.actual.test(text) && !SC_RX.mistake.test(text)) return mk("A", "Supplier states the mass is the actual / calculated mass");
+    if (isFinite(im) && isFinite(ac) && im > 0 && Math.abs(im - ac) / im <= 0.01) return mk("A", `Self-check actual mass ${src.actualMass} matches the mass submitted in IMDS (${r.deliveryMass ?? r.componentMassA})`);
+    if (text && SC_RX.mistake.test(text) && !SC_RX.actual.test(text)) return mk("B", "Supplier states the mass was an input mistake");
+    return null;
+  }
+  if (!text && k !== "supplier:app44") return null;
+  if (k === "intentional") {
+    const n = text.replace(SC_RX.nonIntentional, " "), non = n !== text;
+    if (non && !SC_RX.intentional.test(n)) return mk("A", "Supplier states the substance is non-intentional");
+    if (!non && SC_RX.intentional.test(text)) return mk("B", "Supplier states the substance is used intentionally");
+    return null;
+  }
+  if (k === "supplier:app44") {
+    const a = String(src.applicationId || "").trim(), b = String(r.applicationId || "").trim();
+    return a && b && scNum(a) === scNum(b) ? mk("yes", `Self-check application ID ${a} matches the IMDS entry`) : null;
+  }
+  if (k === "ac71Machining") {
+    if (/not|tidak/i.test(text) && SC_RX.machining.test(text) && /(not|tidak)\s+\w*\s*(for\s+)?machin|tidak\s+.*(bubut|mesin)/i.test(text)) return mk("no", "Supplier states it is not for machining");
+    return SC_RX.machining.test(text) ? mk("yes", "Supplier states the lead is for machining") : null;
+  }
+  // "A. Input mistake / B. It contains" (and "B. Other reason" for the Pb flow)
+  const { hadNot, clean } = neg(text);
+  const mistake = hadNot || SC_RX.mistake.test(clean), contains = SC_RX.contains.test(clean);
+  if (k === "supplier:pb") return mistake && !contains ? mk("A", "Supplier states it was an input mistake") : null;
+  if (mistake && contains) return null;          // contradictory wording — leave it to a person
+  if (mistake) return mk("A", hadNot ? "Supplier states the substance is not contained (input mistake)" : "Supplier states it was an input mistake");
+  if (contains) return mk("B", "Supplier confirms the substance remains in the final product");
+  return null;
+}
+
 let PENDING = null;
 function viewImport() {
   $("#main").innerHTML = header("WORK / SOURCE REFRESH", "Daily G-CATS Update", "Bring in the newest Error Check Log; answers and approvals already given are kept (matched by module, version, error type, component, material and CAS).") + `
@@ -2335,7 +2684,7 @@ function viewImport() {
   const d = $("#drop"); d.ondragover = (e) => { e.preventDefault(); d.classList.add("over"); }; d.ondragleave = () => d.classList.remove("over");
   d.ondrop = (e) => { e.preventDefault(); d.classList.remove("over"); e.dataTransfer.files[0] && handle(e.dataTransfer.files[0]); };
   $("#sample").onclick = () => { PENDING = { file: "TMMIN_GCATS_Error_Log_July24 (sample)", recs: SAMPLE.records, layout: SAMPLE.layout, cls: "PROTECTED" }; commit(); };
-  $("#clear").onclick = () => { if (!confirmClear()) return; S = { records: [], answers: {}, partAnswers: {}, approvals: {}, audit: [], imports: [], flags: {}, settings: S.settings, selfChecks: [], followUps: {}, resubmits: {} }; save(); evaluateAll(); render(); };
+  $("#clear").onclick = () => { if (!confirmClear()) return; S = { records: [], answers: {}, partAnswers: {}, approvals: {}, audit: [], imports: [], flags: {}, settings: S.settings, selfChecks: [], followUps: {}, resubmits: {}, tmc: {} }; save(); evaluateAll(); render(); };
 }
 function confirmClear() { const b = $("#clear"); if (b.dataset.armed) return true; b.dataset.armed = "1"; b.textContent = "Click again to delete all local data"; return false; }
 

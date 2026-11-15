@@ -15,10 +15,10 @@ Runs entirely in the browser — the G-CATS data never leaves the machine it is 
 | --- | --- |
 | **Overview** | KPI cards, completion, bottleneck, error types, by-supplier breakdown, trend, and the Download Summary |
 | **Judgment Workspace** | Internal judgment: every case with its evidence chain, status, and the decision panel |
-| **Supplier Self-Check** | Everything suppliers submitted on their IMDS Material Self-Check Sheets |
+| **Supplier Self-Check** | A searchable library of everything suppliers have told you (imported sheets or typed in, older versions kept, backup / restore). Only the newest entry per part is used for judgement. Their answers feed the Judgment Workspace: where a sheet already answers the engine's supplier question (input mistake / contains / actual mass / non-intentional…), the engine follows its own flow from that answer; if it ends in OK the case is judged OK automatically ("Confirmed by supplier in Self-Check"), otherwise it stays a recommendation for an Approver. A reviewer's own answer always overrides. Two switches on the screen turn this off. |
 | **Daily G-CATS Update** | Import today's Error Check Log; answers and decisions already made are kept |
 | **Auto-Judgement History** | Append-only log of every answer, approval, override and re-open |
-| **Supplier Follow-up** | Open questions grouped per supplier |
+| **Supplier Follow-up** | Per-supplier tracker (Need follow-up → Already followed up → Supplier replied) with the Outlook e-mail template, plus the rejected-part resubmission tracker. Summarised on the Overview. |
 | **Substance References** | CAS lookup: GADSL → TSZ0001G group → POPs / REACH XVII / REACH XIV |
 | **Judgement Rules** | The Appendix II flows the engine follows |
 
@@ -41,7 +41,7 @@ system fonts and keeps working — but to self-host instead:
 
 ## Deploy on Vercel
 
-1. Go to [vercel.com/new](https://vercel.com/new) and import `jasminefleury/gcats-autojudge-enhance`.
+1. Go to [vercel.com/new](https://vercel.com/new) and import `jasminefleury/gcats-auto-judgment-ver2`.
 2. Framework preset: **Other**. Leave the build command empty. `vercel.json` already sets the output
    directory to `public` and adds the security headers.
 3. Deploy. Every push to `main` redeploys automatically.
@@ -85,6 +85,13 @@ A case carries one status, in this order of precedence:
 | Needs input / Recommend OK / Recommend NG / Human review | The engine | Where the Appendix II flow stopped |
 
 A final NG also carries an **IMDS reject comment**, kept separately from the internal comment.
+
+### Confirm to TMC / TMNA first
+
+When an Appendix II flow ends in *Contact to TMC / TMNA / TME / TDEM*, the case is **held**: it shows
+*Confirm to TMC first*, cannot be finalized, and is tracked under **Supplier Follow-up → TMC / TMNA
+confirmation** (Confirm to TMC → Sent → TMC answered, with an e-mail draft). Once TMC's OK / NG is recorded,
+an Approver records the final judgement with that answer pre-filled. Supplier self-check answers never skip this step.
 
 ### WARP part number auto-judgment
 
