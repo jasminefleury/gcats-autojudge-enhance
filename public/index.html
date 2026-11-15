@@ -1135,7 +1135,7 @@ const STORE = "imds-auto-judgement-v1";
 let S = { records: [], answers: {}, partAnswers: {}, approvals: {}, audit: [], imports: [], flags: {}, settings: {} };
 try { const raw = localStorage.getItem(STORE); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) {}
 S.flags = S.flags || {}; S.settings = S.settings || {}; S.selfChecks = S.selfChecks || [];
-S.followUps = S.followUps || {}; S.resubmits = S.resubmits || {};
+S.followUps = S.followUps || {}; S.resubmits = S.resubmits || {}; S.tmc = S.tmc || {};
 /** WARP part-number auto-judgment rule. Editable in Settings; stored with the data. */
 const RULE_DEFAULTS = { warpAuto: true, warpRequireName: true, warpRequireEngineOk: true, selfCheckUse: true, selfCheckAuto: true };
 function rule(k) { return S.settings[k] === undefined ? RULE_DEFAULTS[k] : S.settings[k]; }
@@ -1206,9 +1206,47 @@ function setFlag(it, status, comment) {
   }
   save(); evaluateAll(); render();
 }
+/** Cases the Appendix II flow sends to TMC / TMNA / TME / TDEM. They must be confirmed there
+ *  before anyone records a final OK / NG. */
+const TMC_LABEL = { NEED: "Confirm to TMC first", SENT: "Sent to TMC — waiting", CONFIRMED: "TMC answered" };
+const isTmcCase = (it) => !finalOf(it) && String(it.evaluation.routeTo || "").startsWith("Escalation");
+const tmcOf = (it) => S.tmc[it.key] || { status: "NEED", history: [] };
+const tmcHeld = (it) => isTmcCase(it) && tmcOf(it).status !== "CONFIRMED";
+function setTmc(it, status, decision, note) {
+  const u = user(), prev = tmcOf(it), now = new Date().toISOString();
+  if (status === null) delete S.tmc[it.key];
+  else S.tmc[it.key] = { status, decision: decision || null, note: note || "", at: now, user: u.user, role: u.role,
+    history: [...(prev.history || []), { at: now, user: u.user, status, decision: decision || null, note: note || "" }].slice(-20) };
+  S.audit.push({ at: now, ...u, action: status === null ? "TMC_RESET" : `TMC_${status}`, recordKey: it.key, part: it.record.deliveryPartNo,
+    detail: status === null ? "" : `${TMC_LABEL[status]}${decision ? " — " + decision : ""}${note ? " — " + note : ""}` });
+  save(); render();
+}
+function tmcSent(it) { const n = prompt("Note (optional) — how / to whom did you send it?", ""); if (n !== null) setTmc(it, "SENT", null, n); }
+function tmcAnswer(it) {
+  const d = (prompt("TMC / TMNA / TME answer — type OK or NG", "") || "").trim().toUpperCase();
+  if (!d) return;
+  if (d !== "OK" && d !== "NG") return toast("Please type OK or NG");
+  const n = prompt("Their reply or reference (optional)", ""); if (n === null) return;
+  setTmc(it, "CONFIRMED", d, n);
+}
+function tmcMail(cases) {
+  const pic = user().user === "unnamed" ? "[your name]" : user().user, title = S.settings.picTitle || "Material Engineering - TMMIN";
+  let body = `Dear TMC / TMNA / TME Team,\nThis is ${pic} from ${title} as IMDS PIC.\nWe need your confirmation on the following IMDS case${cases.length === 1 ? "" : "s"} before we can record the final judgement.\n`;
+  cases.forEach((it, i) => {
+    const r = it.record, e = it.evaluation, sc = (e.trace || []).find((t) => t.viaSelfCheck), a = it.answers || {};
+    body += `\n${i + 1}. Supplier : ${r.supplierCode || "—"} ${r.companyName || ""}\n   Part Number : ${r.deliveryPartNo || "—"}\n   Error : ${titleCase(e.errorCategory)}\n`;
+    if (r.cas) body += `   Substance : CAS ${r.cas}${r.substanceName ? " (" + String(r.substanceName).split("\n")[0] + ")" : ""}${r.contentPct != null ? ", " + r.contentPct + " wt%" : ""}\n`;
+    if (a.destination) body += `   Vehicle destination : ${a.destination}\n`;
+    if (sc) body += `   Supplier confirmation : ${sc.viaSelfCheck.why}${sc.viaSelfCheck.quote ? ` ("${sc.viaSelfCheck.quote}")` : ""}\n`;
+    body += `   Reason for escalation : ${e.comment || (e.reasons || [])[0] || "Appendix II flow ends in a contact to TMC"}\n`;
+  });
+  body += `\nPlease confirm whether this can be judged OK or NG.\nWe look forward for your feedback.\nThank you for your support.\n\nBest Regards,\n${pic}\n${title}`;
+  return { subject: `IMDS Judgement Confirmation Needed - ${cases.length} case${cases.length === 1 ? "" : "s"}`, body };
+}
 function statusTag(it) {
   const f = finalOf(it);
   if (f) return `<span class="tag ${f.newStatus === "FINAL_OK" ? "t-ok" : "t-ng"}">${f.newStatus === "FINAL_OK" ? "OK" : "NG"}</span>${f.judgmentType === "Auto Judged" ? ` <span class="tag t-route" title="${f.autoSource === "Supplier self-check" ? "Judged automatically: the supplier already confirmed it on their self-check sheet" : "Judged automatically by the WARP part-number rule"}">${f.autoSource === "Supplier self-check" ? "Self-check" : "Auto"}</span>` : ""}`;
+  if (tmcHeld(it)) return `<span class="tag t-wait">⚠️ ${tmcOf(it).status === "SENT" ? "Waiting for TMC" : "Confirm to TMC first"}</span>`;
   const fl = flagOf(it);
   if (fl && fl.status === FLAG_SUPPLIER) return `<span class="tag t-wait">⚠️ Need confirmation</span>`;
   if (fl && fl.status === FLAG_WORKING) return `<span class="tag t-rev">Working</span>`;
@@ -1221,12 +1259,13 @@ function statusTag(it) {
 function statusKey(it) {
   const f = finalOf(it);
   if (f) return f.newStatus === "FINAL_OK" ? "OK" : "NG";
+  if (tmcHeld(it)) return "NEED_TMC";
   const fl = flagOf(it);
   if (fl) return fl.status;
   return it.evaluation.status;
 }
 const WORKSPACE_STATUSES = [
-  ["OK", "OK"], ["NG", "NG"], ["NEED_SUPPLIER", "⚠️ Need confirmation to supplier"], ["WORKING", "Working (under internal judgment)"],
+  ["OK", "OK"], ["NG", "NG"], ["NEED_SUPPLIER", "⚠️ Need confirmation to supplier"], ["NEED_TMC", "⚠️ Confirm to TMC / TMNA first"], ["WORKING", "Working (under internal judgment)"],
   ["AWAITING_INPUT", "Needs input"], ["RECOMMEND_OK", "Recommend OK"], ["RECOMMEND_NG", "Recommend NG"], ["NEED_HUMAN_REVIEW", "Human review"],
 ];
 /** Pending internal judgment = anything a person still has to act on inside the company. */
@@ -1327,7 +1366,8 @@ function render() {
   const nSelf = $("#n-self"); if (nSelf) nSelf.textContent = selfCheckRows().length;
   // suppliers still to contact, plus parts still to be resubmitted
   $("#n-sup").textContent = Object.keys(supplierOpen()).filter((k) => fuOf(k).status !== "REPLIED").length
-    + resubmitCases().filter((it) => (S.resubmits[it.key] || {}).status !== "RESUBMITTED").length;
+    + resubmitCases().filter((it) => (S.resubmits[it.key] || {}).status !== "RESUBMITTED").length
+    + ITEMS.filter(tmcHeld).length;
   ({ overview: viewOverview, register: viewRegister, import: viewImport, history: viewHistory, supplier: viewSupplier, selfcheck: viewSelfCheck, refs: viewRefs, rules: viewRules })[UI.view]();
 }
 
@@ -1428,6 +1468,7 @@ function viewOverview() {
   // what needs attention first: supplier-side blockers outrank internal ones, then biggest first
   const att = [
     { sev: "red", n: fu.awaiting, h: `${plural(fu.awaiting, "rejected part")} waiting for IMDS resubmission`, l: "Rejected parts awaiting resubmission", a: 'data-fuo="resubmit" data-rs="awaiting"' },
+    { sev: "red", n: fu.tmcNeed + fu.tmcSent, h: `${plural(fu.tmcNeed + fu.tmcSent, "case")} on hold for TMC / TMNA confirmation`, l: "On hold — confirm to TMC / TMNA", a: 'data-fuo="tmc"' },
     { sev: "red", n: fu.need, h: `${plural(fu.need, "supplier")} not contacted yet`, l: "Suppliers not contacted yet", a: 'data-fuo="open" data-fs="NEED"' },
     { sev: "amber", n: d.readyToConfirm.length, h: `${plural(d.readyToConfirm.length, "case")} ready for an Approver to confirm`, l: "Ready for an Approver to confirm", a: 'data-go="RECOMMEND_OK"' },
     { sev: "amber", n: d.awaiting.length, h: `${plural(d.awaiting.length, "case")} waiting for your answer`, l: "Waiting for your answer", a: 'data-go="AWAITING_INPUT"' },
@@ -1680,7 +1721,8 @@ function drawer(it) {
   const r = it.record, e = it.evaluation, f = finalOf(it), fl = flagOf(it), g = GROUP_OF.get(it.key), u = user();
   const canFinal = u.role === "Approver" || u.role === "Administrator";
   const rec = e.recommendedJudge;
-  const decision = UI.decision || rec;
+  const tmcDone = isTmcCase(it) && tmcOf(it).status === "CONFIRMED" ? tmcOf(it) : null;
+  const decision = UI.decision || (tmcDone && tmcDone.decision) || rec;
   const override = decision && (decision !== rec || e.status !== "RECOMMEND_OK" && e.status !== "RECOMMEND_NG");
   const icon = (t) => t.kind === "outcome" ? `<span class="ic out">■</span>` : `<span class="ic ${t.status}">${t.status === "done" ? "✓" : t.status === "blocked" ? "!" : ""}</span>`;
   const answered = Object.entries(answersFor(r));
@@ -1725,6 +1767,11 @@ function drawer(it) {
       <div>${esc(f.comment)}</div>${f.imdsReject ? `<div class="small"><b>IMDS reject comment:</b> ${esc(f.imdsReject)}</div>` : ""}${f.justification ? `<div class="small">Justification: ${esc(f.justification)}</div>` : ""}
       <div class="small">Engine recommendation: ${esc(f.aiRecommendation || "none")} (${esc(f.previousStatus)}) at ${esc((f.aiTimestamp || "").slice(0, 16))}</div>
       ${canFinal ? `<button class="btn" id="reopen" style="margin-top:8px">Re-open (new decision will be logged)</button>` : ""}</div>` : `
+  ${isTmcCase(it) ? (() => { const t = tmcOf(it); return `<div class="box ${t.status === "CONFIRMED" ? "rec-ok" : "ask"}"><b>${t.status === "CONFIRMED" ? `✓ TMC / TMNA / TME answered: ${esc(t.decision)}` : "⚠️ Confirm to TMC / TMNA / TME first"}</b>
+      <div class="small" style="margin-top:4px">${esc(e.comment || "The Appendix II flow ends in a contact to TMC.")}</div>
+      ${t.status === "CONFIRMED" ? `<div class="small">${esc(t.user)} · ${esc(t.at.replace("T", " ").slice(0, 16))}${t.note ? " — " + esc(t.note) : ""}</div><div class="small">You can now record the final judgement below.</div>`
+        : `<div class="small">${t.status === "SENT" ? `Sent by ${esc(t.user)} on ${esc(t.at.replace("T", " ").slice(0, 16))} — waiting for their answer.` : "A final OK / NG can only be recorded after TMC has answered."}</div>
+      <div class="opts"><button class="opt" id="tmc-mail">✉ Draft e-mail to TMC</button>${t.status === "NEED" ? `<button class="opt" id="tmc-sent">Mark sent</button>` : ""}<button class="opt" id="tmc-answer">Record TMC's answer</button></div>`}</div>`; })() : ""}
   ${fl ? `<div class="box ${fl.status === "NEED_SUPPLIER" ? "ask" : "rev"}"><b>${fl.status === "NEED_SUPPLIER" ? "⚠️ Waiting on supplier confirmation" : "Under internal judgment"}</b>
       <div class="small">${esc(fl.user)} (${esc(fl.role)}) · ${esc(fl.at.replace("T", " ").slice(0, 16))}</div>
       ${fl.comment ? `<div>${esc(fl.comment)}</div>` : ""}
@@ -1734,11 +1781,11 @@ function drawer(it) {
     <div class="judge" style="grid-template-columns:1fr 1fr"><button class="jb ok ${decision === "OK" ? "on" : ""}" data-dec="OK">✓ OK</button><button class="jb ng ${decision === "NG" ? "on" : ""}" data-dec="NG">⊗ NG</button></div>
     <div class="opts" style="margin-top:8px"><button class="opt" id="mark-working">Mark as Working</button><button class="opt" id="mark-supplier">⚠️ Need confirmation to supplier</button></div>
     <label class="l">Comment — record of changing to "OK" (required)</label>
-    <textarea id="cmt">${esc(decision && decision === rec ? e.comment || "" : "")}</textarea>
+    <textarea id="cmt">${esc(tmcDone ? `Confirmed by TMC / TMNA / TME: ${tmcDone.decision}${tmcDone.note ? " — " + tmcDone.note : ""}` : decision && decision === rec ? e.comment || "" : "")}</textarea>
     ${decision === "NG" ? `<label class="l">IMDS reject comment (sent to the supplier)</label><textarea id="imdsrej">${esc(e.comment || "")}</textarea>` : ""}
-    ${override ? `<label class="l">Override justification (required)</label><textarea id="just"></textarea>` : ""}
+    ${override ? `<label class="l">Override justification (required)</label><textarea id="just">${esc(tmcDone ? `Judged after TMC / TMNA / TME confirmation (${tmcDone.decision}${tmcDone.note ? ": " + tmcDone.note : ""})` : "")}</textarea>` : ""}
     ${g && (e.status === "RECOMMEND_OK" || e.status === "RECOMMEND_NG") ? `<label class="small" style="display:block;margin-top:6px"><input type="checkbox" id="ag2" checked> Confirm for all ${g.length} identical cases</label>` : ""}
-    <button class="btn pri" id="confirm" style="margin-top:8px;width:100%" ${canFinal && decision ? "" : "disabled"}>Confirm judgment</button>
+    <button class="btn pri" id="confirm" style="margin-top:8px;width:100%" ${canFinal && decision && !tmcHeld(it) ? "" : "disabled"}>${tmcHeld(it) ? "Waiting for TMC / TMNA answer" : "Confirm judgment"}</button>
     <div class="small" style="margin-top:6px">${canFinal ? "Recorded with your name, role and the time." : `Your role (${esc(u.role)}) can set Working and Need confirmation, but only an Approver records a final OK/NG.`}</div>
   </div>`}
   <details style="margin-top:10px"><summary>Reference versions used</summary>${Object.entries(e.referenceVersions).map(([k, v]) => `<div class="small mono">${esc(k)}: ${esc(v)}</div>`).join("")}</details>
@@ -1753,6 +1800,9 @@ function setAnswer(r, key, value) {
 
 function bindDrawer(it) {
   $("#close").onclick = () => { UI.sel = null; render(); };
+  const tm = $("#tmc-mail"); if (tm) tm.onclick = () => { const t = tmcMail([it]); navigator.clipboard?.writeText(t.body); window.location.href = `mailto:?subject=${encodeURIComponent(t.subject)}&body=${encodeURIComponent(t.body)}`.slice(0, 1900); toast("E-mail drafted — the text is also on your clipboard"); };
+  const ts = $("#tmc-sent"); if (ts) ts.onclick = () => tmcSent(it);
+  const ta = $("#tmc-answer"); if (ta) ta.onclick = () => tmcAnswer(it);
   const ag = $("#ag"); if (ag) ag.onchange = () => (UI.applyGroup = ag.checked);
   document.querySelectorAll("[data-ans]").forEach((b) => (b.onclick = () => {
     const key = it.evaluation.pendingQuestion.key, value = b.dataset.ans;
@@ -1776,11 +1826,14 @@ function bindDrawer(it) {
   document.querySelectorAll("[data-dec]").forEach((b) => (b.onclick = () => { UI.decision = b.dataset.dec; render(); }));
   const c = $("#confirm"); if (c) c.onclick = () => {
     const g = GROUP_OF.get(it.key); const all = $("#ag2") && $("#ag2").checked ? g : [it];
+    if (all.some(tmcHeld)) return toast("Some of these cases still need TMC / TMNA confirmation first");
+    const dec = UI.decision || (isTmcCase(it) && tmcOf(it).status === "CONFIRMED" ? tmcOf(it).decision : null) || it.evaluation.recommendedJudge;
+    if (dec !== "OK" && dec !== "NG") return toast("Choose OK or NG first");
     const comment = $("#cmt").value, just = $("#just") ? $("#just").value : undefined;
     const imdsRej = $("#imdsrej") ? $("#imdsrej").value : "";
     try {
       for (const m of all) {
-        const entry = IMDS.approve(m.evaluation, user(), UI.decision || it.evaluation.recommendedJudge, comment, just, all.length > 1 ? it.key : undefined);
+        const entry = IMDS.approve(m.evaluation, user(), dec, comment, just, all.length > 1 ? it.key : undefined);
         entry.part = m.record.deliveryPartNo; entry.errorCategory = m.evaluation.errorCategory; entry.supplierCode = m.record.supplierCode;
         entry.judgmentType = "Manual judgment";
         if (imdsRej.trim()) entry.imdsReject = imdsRej.trim();
@@ -2044,6 +2097,10 @@ function fuStats() {
     sent: keys.filter((k) => fuOf(k).status === "SENT").length,
     replied: keys.filter((k) => fuOf(k).status === "REPLIED").length,
     resubDone, awaiting: resub.length - resubDone,
+    tmcCases: ITEMS.filter(isTmcCase),
+    tmcNeed: ITEMS.filter((i) => isTmcCase(i) && tmcOf(i).status === "NEED").length,
+    tmcSent: ITEMS.filter((i) => isTmcCase(i) && tmcOf(i).status === "SENT").length,
+    tmcDone: ITEMS.filter((i) => isTmcCase(i) && tmcOf(i).status === "CONFIRMED").length,
     accepted: ITEMS.filter((it) => { const f = finalOf(it); return f && f.newStatus === "FINAL_OK"; }).length,
   };
 }
@@ -2065,11 +2122,13 @@ function viewSupplier() {
     <button class="kpi y" data-fu="open" data-fs="NEED"><span>Need follow-up</span><b>${need}</b><em>supplier${need === 1 ? "" : "s"} not contacted yet</em></button>
     <button class="kpi b" data-fu="open" data-fs="SENT"><span>Already followed up</span><b>${sent}</b><em>waiting for their answer</em></button>
     <button class="kpi g" data-fu="open" data-fs="REPLIED"><span>Supplier replied</span><b>${replied}</b><em>answer recorded in the Workspace</em></button>
+    <button class="kpi p" data-fu="tmc"><span>Waiting for TMC / TMNA</span><b>${st.tmcNeed + st.tmcSent}</b><em>${st.tmcNeed} to send · ${st.tmcSent} sent${st.tmcDone ? ` · ${st.tmcDone} answered` : ""}</em></button>
     <button class="kpi r" data-fu="resubmit" data-rs="awaiting"><span>Awaiting IMDS resubmission</span><b>${awaiting}</b><em>${st.resubDone} of ${resub.length} resubmitted</em></button>
   </div>
   <div class="fu-bar">
     <div class="chips" style="margin:0">
       ${chip("data-fu", "open", "Open questions", keys.length, tab === "open")}
+      ${chip("data-fu", "tmc", "TMC / TMNA confirmation", st.tmcCases.length, tab === "tmc")}
       ${chip("data-fu", "resubmit", "Rejected — resubmission tracker", resub.length, tab === "resubmit")}
       ${chip("data-fu", "settings", "E-mail signature", undefined, tab === "settings")}
     </div>
@@ -2083,6 +2142,22 @@ function viewSupplier() {
     <label class="l">Division / title</label><input id="pic-title" class="btn" style="width:100%" value="${esc(S.settings.picTitle || "Material Engineering - TMMIN")}">
     <button class="btn pri" id="pic-save" style="margin-top:10px">Save</button>
   </div>`
+
+  : tab === "tmc" ? (() => {
+      const list = st.tmcCases.filter((it) => !q || [it.record.deliveryPartNo, it.record.supplierCode, it.record.companyName].join(" ").toLowerCase().includes(q));
+      if (!list.length) return `<div class="card empty"><div class="big">${ICO.inn}</div><h3>${st.tmcCases.length ? "Nothing in this view" : "Nothing to confirm with TMC"}</h3><p>When an Appendix II flow ends in “Contact to TMC / TMNA / TME / TDEM”, the case is held here. A final OK / NG can only be recorded after their answer is logged.</p></div>`;
+      const flowOf = (t) => { const i = ["NEED", "SENT", "CONFIRMED"].indexOf(t.status); return `<ol class="fu-flow">${["NEED", "SENT", "CONFIRMED"].map((x, n) => `<li class="${n < i ? "done" : ""}${n === i ? " cur" : ""}"><i>${n < i ? "✓" : n + 1}</i>${TMC_LABEL[x]}</li>`).join("")}</ol>`; };
+      const todo = list.filter((it) => tmcOf(it).status !== "CONFIRMED");
+      return `<div class="card w fu-card"><div class="fu-head"><div><h3>TMC / TMNA / TME / TDEM confirmation</h3><div class="small">${todo.length} case${todo.length === 1 ? "" : "s"} still to send or waiting for an answer · judgement is on hold until TMC answers</div></div>
+        <div class="tools"><button class="btn pri" data-tmcmail-all ${todo.length ? "" : "disabled"}>✉ Draft one e-mail for ${todo.length} case${todo.length === 1 ? "" : "s"}</button></div></div>
+        <div class="fu-tablewrap"><table class="fu-table"><thead><tr><th>Part number</th><th>Supplier</th><th>Why it was escalated</th><th>Progress</th><th></th></tr></thead><tbody>
+        ${list.map((it) => { const t = tmcOf(it), sc = (it.evaluation.trace || []).find((x) => x.viaSelfCheck);
+          return `<tr><td class="mono"><button class="linkbtn" data-goreg2="${esc(it.key)}">${esc(it.record.deliveryPartNo || "—")}</button><div class="small">${esc(it.evaluation.errorCategory)}</div></td>
+          <td class="small">${esc(it.record.supplierCode || "—")}<div>${esc((it.record.companyName || "").slice(0, 30))}</div></td>
+          <td class="small fu-note">${esc(it.evaluation.comment || (it.evaluation.reasons || [])[0] || "")}${sc ? `<div><span class="tag t-route">supplier self-check</span> ${esc(sc.viaSelfCheck.why)}</div>` : ""}</td>
+          <td>${flowOf(t)}${t.status === "CONFIRMED" ? `<div><span class="tag ${t.decision === "OK" ? "t-ok" : "t-ng"}">TMC says ${esc(t.decision)}</span></div>` : ""}${t.at && t.status !== "NEED" ? `<div class="small">${esc(t.user)} · ${esc(t.at.replace("T", " ").slice(0, 16))}${t.note ? " — " + esc(t.note) : ""}</div>` : ""}</td>
+          <td style="white-space:nowrap">${t.status === "NEED" ? `<button class="btn sm" data-tmcsent="${esc(it.key)}">Mark sent</button> ` : ""}${t.status !== "CONFIRMED" ? `<button class="btn sm" data-tmcans="${esc(it.key)}">Record TMC's answer</button>` : `<button class="btn sm" data-goreg2="${esc(it.key)}">Judge now</button> <button class="btn sm ghost" data-tmcreset="${esc(it.key)}">Undo</button>`}</td></tr>`; }).join("")}
+        </tbody></table></div></div>`; })()
 
   : tab === "resubmit" ? (
     `<div class="chips" style="margin:0 0 12px">
@@ -2188,6 +2263,17 @@ function viewSupplier() {
   document.querySelectorAll("[data-reset]").forEach((b) => (b.onclick = () => setFollowUp(b.dataset.reset, "NEED", "")));
   document.querySelectorAll("[data-resub]").forEach((b) => (b.onclick = () => { const n = prompt("Note (optional) — new module ID / version?", ""); if (n === null) return; setResubmit(b.dataset.resub, "RESUBMITTED", n); }));
   document.querySelectorAll("[data-unresub]").forEach((b) => (b.onclick = () => setResubmit(b.dataset.unresub, null)));
+  const byKey = (k) => ITEMS.find((i) => i.key === k);
+  document.querySelectorAll("[data-tmcsent]").forEach((b) => (b.onclick = () => tmcSent(byKey(b.dataset.tmcsent))));
+  document.querySelectorAll("[data-tmcans]").forEach((b) => (b.onclick = () => tmcAnswer(byKey(b.dataset.tmcans))));
+  document.querySelectorAll("[data-tmcreset]").forEach((b) => (b.onclick = () => setTmc(byKey(b.dataset.tmcreset), null)));
+  const tma = document.querySelector("[data-tmcmail-all]"); if (tma) tma.onclick = () => {
+    const todo = st.tmcCases.filter((it) => tmcOf(it).status !== "CONFIRMED"), t = tmcMail(todo);
+    navigator.clipboard?.writeText(t.body); window.location.href = `mailto:?subject=${encodeURIComponent(t.subject)}&body=${encodeURIComponent(t.body)}`.slice(0, 1900);
+    toast("E-mail drafted — the full text is on your clipboard");
+    todo.filter((it) => tmcOf(it).status === "NEED").forEach((it) => { S.tmc[it.key] = { status: "SENT", decision: null, note: "E-mail drafted", at: new Date().toISOString(), user: user().user, role: user().role, history: [] }; });
+    S.audit.push({ at: new Date().toISOString(), ...user(), action: "TMC_SENT", detail: `${todo.length} case(s) drafted in one e-mail` }); save(); render();
+  };
   const ps = $("#pic-save"); if (ps) ps.onclick = () => { S.settings.picTitle = $("#pic-title").value.trim(); save(); toast("Signature saved"); render(); };
 }
 
@@ -2452,7 +2538,7 @@ function viewImport() {
   const d = $("#drop"); d.ondragover = (e) => { e.preventDefault(); d.classList.add("over"); }; d.ondragleave = () => d.classList.remove("over");
   d.ondrop = (e) => { e.preventDefault(); d.classList.remove("over"); e.dataTransfer.files[0] && handle(e.dataTransfer.files[0]); };
   $("#sample").onclick = () => { PENDING = { file: "TMMIN_GCATS_Error_Log_July24 (sample)", recs: SAMPLE.records, layout: SAMPLE.layout, cls: "PROTECTED" }; commit(); };
-  $("#clear").onclick = () => { if (!confirmClear()) return; S = { records: [], answers: {}, partAnswers: {}, approvals: {}, audit: [], imports: [], flags: {}, settings: S.settings, selfChecks: [], followUps: {}, resubmits: {} }; save(); evaluateAll(); render(); };
+  $("#clear").onclick = () => { if (!confirmClear()) return; S = { records: [], answers: {}, partAnswers: {}, approvals: {}, audit: [], imports: [], flags: {}, settings: S.settings, selfChecks: [], followUps: {}, resubmits: {}, tmc: {} }; save(); evaluateAll(); render(); };
 }
 function confirmClear() { const b = $("#clear"); if (b.dataset.armed) return true; b.dataset.armed = "1"; b.textContent = "Click again to delete all local data"; return false; }
 

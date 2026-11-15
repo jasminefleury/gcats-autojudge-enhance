@@ -86,6 +86,13 @@ A case carries one status, in this order of precedence:
 
 A final NG also carries an **IMDS reject comment**, kept separately from the internal comment.
 
+### Confirm to TMC / TMNA first
+
+When an Appendix II flow ends in *Contact to TMC / TMNA / TME / TDEM*, the case is **held**: it shows
+*Confirm to TMC first*, cannot be finalized, and is tracked under **Supplier Follow-up → TMC / TMNA
+confirmation** (Confirm to TMC → Sent → TMC answered, with an e-mail draft). Once TMC's OK / NG is recorded,
+an Approver records the final judgement with that answer pre-filled. Supplier self-check answers never skip this step.
+
 ### WARP part number auto-judgment
 
 A WARP part-number case is judged **OK automatically** when all of the following hold:
