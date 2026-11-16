@@ -14,8 +14,8 @@ Runs entirely in the browser — the G-CATS data never leaves the machine it is 
 | Screen | What it is for |
 | --- | --- |
 | **Overview** | KPI cards, completion, bottleneck, error types, by-supplier breakdown, trend, and the Download Summary |
-| **Judgment Workspace** | Internal judgment: every case with its evidence chain, status, and the decision panel |
-| **Supplier Self-Check** | A searchable library of everything suppliers have told you (imported sheets or typed in, older versions kept, backup / restore). Only the newest entry per part is used for judgement. Their answers feed the Judgment Workspace: where a sheet already answers the engine's supplier question (input mistake / contains / actual mass / non-intentional…), the engine follows its own flow from that answer; if it ends in OK the case is judged OK automatically ("Confirmed by supplier in Self-Check"), otherwise it stays a recommendation for an Approver. A reviewer's own answer always overrides. Two switches on the screen turn this off. |
+| **Judgment Workspace** | Internal judgment: every case with its evidence chain, status, and the decision panel. Switch to **Group by supplier & error type** to judge a whole group OK / NG in one step |
+| **Supplier Self-Check** | A searchable library of everything suppliers have told you (dropped or imported sheets, pasted cells, or typed in, older versions kept, backup / restore). Only the newest entry per part is used for judgement. Their answers feed the Judgment Workspace: where a sheet already answers the engine's supplier question (input mistake / contains / actual mass / non-intentional…), the engine follows its own flow from that answer; if it ends in OK the case is judged OK automatically ("Confirmed by supplier in Self-Check"), otherwise it stays a recommendation for an Approver. A reviewer's own answer always overrides. Two switches on the screen turn this off. |
 | **Daily G-CATS Update** | Import today's Error Check Log; answers and decisions already made are kept |
 | **Auto-Judgement History** | Append-only log of every answer, approval, override and re-open |
 | **Supplier Follow-up** | Per-supplier tracker (Need follow-up → Already followed up → Supplier replied) with the Outlook e-mail template, plus the rejected-part resubmission tracker. Summarised on the Overview. |
@@ -61,7 +61,8 @@ Open `public/index.html` in a browser. That is all — there is no build step.
 3. **Overview** → start with what needs attention.
 4. **Judgement Register** → open a case, read the evidence chain, answer the engine's question.
    *Apply to identical cases* answers a whole group at once; any case that reaches a different
-   result on its own data is split back out.
+   result on its own data is split back out. Or switch to **Group by supplier & error type** and
+   judge a supplier's whole error group OK / NG in one confirmed step.
 5. Set your role to **Approver** to confirm a final OK/NG. A comment is always required; overriding
    the engine, or deciding a case it could not judge, also requires a written justification.
 6. Export:
@@ -72,6 +73,46 @@ Open `public/index.html` in a browser. That is all — there is no build step.
      comment, any override justification, who decided, their role and when. Status is a solid fill:
      green OK, red NG, amber needs input, violet human review.
    - **Printable summary** (PDF via your browser) and **CSV**.
+
+### Supplier Self-Check: drag & drop
+
+Drop files anywhere on the **Supplier Self-Check** screen (or click the drop zone to choose them):
+
+- the supplier's **IMDS Information Form** (`.xlsx`) — several files at once;
+- a **CSV** with the same columns (the sheet's own headings or the on-screen labels);
+- a library **backup** (`.json`), merged into what is already there;
+- or copy cells in Excel — header row included — and press **Ctrl+V** on the screen.
+
+Each file is read, added to the library and fed into the Judgment Workspace straight away. The
+upload result lists every file (added / already in the library — skipped / why it was refused) and
+the supplier × error-type groups it touched, with a button that opens those groups for judgment.
+An old `.xls` or a G-CATS Error Check Log dropped here by mistake is refused with a hint.
+**+ Add entry** (typing by hand) and **⬆ Import sheet** still work as before.
+
+### Group judgment (bulk OK / NG)
+
+In the **Judgment Workspace**, switch from **☰ List** to **▦ Group by supplier & error type**.
+Cases are grouped by **supplier code and error type together**:
+
+- two suppliers are never in one group, even with the same error type;
+- two error types are never in one group, even for the same supplier;
+- a case with no supplier code is never grouped — it is listed under *Judge on their own*.
+
+Each card shows the error type, the supplier, the **number of part numbers** (and cases), what the
+engine recommends, and every part number with its own status. Untick any part number you want to
+leave out, then click **Judge all OK** or **Judge all NG**. A confirmation step lists exactly which
+part numbers will change, how many match the engine's recommendation, and asks for:
+
+- the comment (required, saved on every case) and, for NG, the IMDS reject comment;
+- an override justification when the decision goes against (or without) an engine recommendation;
+- a tick on *"I have reviewed these cases…"* before **Apply** is enabled.
+
+Nothing is saved if a required field is missing. On Apply, every selected case gets the same final
+OK / NG at once, recorded as **Manual judgment (group)** with your name, role and time, plus one
+**BULK_JUDGE** line in History. Only an Approver or Administrator can apply it. Cases that are
+already judged are never overwritten, and cases waiting for TMC / TMNA confirmation are left out.
+**↺ Re-open the … judged together** takes a group judgment back; each case can also still be opened
+and judged on its own.
 
 ### Internal judgment statuses
 

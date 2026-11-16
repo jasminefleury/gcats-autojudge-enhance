@@ -111,6 +111,62 @@ textarea{width:100%;border:1.5px solid var(--line2);border-radius:14px;padding:9
 label.l{display:block;font-size:12px;color:var(--muted);margin-top:10px;font-weight:550}
 .drop{border:2px dashed var(--drop-line);border-radius:20px;padding:38px;text-align:center;color:var(--muted);background:var(--panel);transition:all .15s}.drop.over{border-color:var(--brand);background:var(--brand-bg)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+/* supplier self-check: drag & drop */
+.sc-drop{display:grid;justify-items:center;gap:4px;padding:24px 20px;margin:0 0 14px;cursor:pointer;outline:none}
+.sc-drop:hover,.sc-drop:focus-visible{border-color:var(--brand)}
+.sc-drop>b{color:var(--ink);font-size:15.5px}.sc-drop .small b{color:var(--ink2)}
+.sc-drop-ico{width:46px;height:46px;border-radius:14px;background:var(--brand-bg);display:grid;place-items:center;margin-bottom:4px}
+.sc-drop-ico svg{width:24px;height:24px;stroke:var(--brand2);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sc-drop.over .sc-drop-ico{transform:translateY(-3px);transition:transform .15s}
+.sc-drop.busy{opacity:.55;pointer-events:none}
+.drop-result{margin:0 0 14px}
+.drop-files{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.drop-files li{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;background:var(--soft);border-radius:12px;padding:8px 12px}
+.drop-files li>b{font-size:15px}.drop-files li.good>b{color:var(--green)}.drop-files li.bad>b{color:var(--red)}.drop-files li.dup>b{color:var(--muted)}
+.drop-groups{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}.drop-groups .chips{margin:8px 0 10px}
+/* judgment workspace: grouped by supplier code x error type */
+.seg{display:inline-flex;background:var(--panel);border-radius:14px;padding:3px;gap:2px}
+.seg button{border:0;background:none;border-radius:11px;padding:7px 13px;font-weight:650;font-size:13px;color:var(--muted);white-space:nowrap}
+.seg button:hover{color:var(--violet)}.seg button.on{background:var(--violet);color:#fff}
+.grp-wrap{min-width:0}
+.grp-bar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin:0 0 12px;padding:0 4px}
+.grps{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:14px;align-items:start}
+.wrap.open .grps{grid-template-columns:1fr}
+.grp{padding:18px 20px;display:grid;gap:12px}
+.grp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.grp-head h3{font-size:18px;margin-top:2px}
+.grp-body{background:var(--soft);border-radius:18px;padding:14px 16px;display:grid;gap:10px}
+.grp-sup{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.grp-sup>div>b{font-size:16px}
+.grp-n{text-align:right;flex:none}.grp-n b{display:block;font-size:26px;line-height:1;color:var(--brand2);font-variant-numeric:tabular-nums}.grp-n span{font-size:11.5px;color:var(--muted)}
+.grp-eng{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.grp-pick{margin-left:auto;font-size:12px;color:var(--muted)}
+.grp-parts{list-style:none;margin:0;padding:0;max-height:300px;overflow:auto}
+.grp-parts li{display:grid;grid-template-columns:18px auto minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:7px 2px;border-bottom:1px solid var(--line)}
+.grp-parts li:last-child{border-bottom:0}
+.grp-parts li.off .mono,.grp-parts li.off .grp-desc{opacity:.5}
+.grp-parts input[type=checkbox]{width:16px;height:16px;accent-color:var(--violet);margin:0}
+.grp-desc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.linkbtn{border:0;background:none;padding:0;color:var(--brand2);font-weight:650;font-size:12px}.linkbtn:hover{text-decoration:underline}
+.warn{color:var(--yellow)}
+.grp-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.gb{border:0;border-radius:999px;padding:11px 16px;font-weight:700;font-size:14.5px;color:#fff;transition:filter .12s,transform .12s,box-shadow .12s}
+.gb.ok{background:var(--green);box-shadow:0 6px 16px rgba(15,157,118,.28)}.gb.ng{background:var(--red);box-shadow:0 6px 16px rgba(224,64,95,.28)}
+.gb:hover:not(:disabled){filter:brightness(1.07);transform:translateY(-1px)}
+.gb:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.grp-foot{margin-top:-4px}.grp-reopen{justify-self:start;padding:7px 12px;font-size:12.5px}
+/* confirmation dialog */
+.modal-bg{position:fixed;inset:0;background:rgba(24,12,70,.48);display:grid;place-items:center;padding:20px;z-index:60;animation:fadein .15s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.modal{background:var(--panel);color:var(--ink);border-radius:var(--r);padding:24px 26px;width:min(640px,100%);max-height:calc(100vh - 40px);overflow:auto;box-shadow:0 30px 80px rgba(20,8,70,.35)}
+.modal h2{margin:4px 0 4px;font-size:22px;letter-spacing:-.01em}
+.dec-ok{color:var(--green)}.dec-ng{color:var(--red)}
+.modal-parts{background:var(--soft);border-radius:14px;padding:4px 12px;margin:12px 0;max-height:220px}
+.modal-parts li{grid-template-columns:0 auto minmax(0,1fr) auto 0}
+.ack{display:flex;gap:9px;align-items:flex-start;margin:14px 0 4px;font-size:13px;font-weight:600}.ack input{width:17px;height:17px;margin-top:1px;accent-color:var(--violet);flex:none}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}.modal-actions .gb{min-width:220px}
+@media(max-width:700px){.grps{grid-template-columns:1fr}.grp-parts li{grid-template-columns:18px auto minmax(0,1fr) auto}.grp-parts li .linkbtn{display:none}}
+
 .x{float:right;border:0;background:var(--soft);border-radius:8px;width:30px;height:30px;font-size:18px;color:var(--muted)}.x:hover{background:var(--line)}
 .toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;padding:12px 16px;border-radius:12px;font-size:13px;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none;max-width:440px;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:50}.toast.on{opacity:1;transform:none}
 details summary{cursor:pointer;color:var(--muted);font-size:12.5px;font-weight:500}
@@ -1149,7 +1205,7 @@ function setRule(k, v) {
   S.audit.push({ at: new Date().toISOString(), ...user(), action: "RULE_CHANGE", detail: `${k} = ${v}` });
   save(); applyAutoJudgement(); evaluateAll(); render();
 }
-let UI = { view: "overview", sel: null, cat: "All", status: "", route: "", q: "", decision: null, applyGroup: true };
+let UI = { view: "overview", sel: null, cat: "All", status: "", route: "", q: "", decision: null, applyGroup: true, grouped: false, groupSup: null, groupShowDone: false, groupOff: {} };
 let ITEMS = [], GROUP_OF = new Map();
 
 // ---------------- theme ----------------
@@ -1673,6 +1729,7 @@ function viewRegister() {
   </div>
   <div class="card">
     <div class="tools">
+      <div class="seg" role="tablist" aria-label="Layout"><button role="tab" class="${UI.grouped ? "" : "on"}" data-mode="list" aria-selected="${!UI.grouped}">☰ List</button><button role="tab" class="${UI.grouped ? "on" : ""}" data-mode="group" aria-selected="${!!UI.grouped}" title="Same supplier code + same error type, judged in one step">▦ Group by supplier &amp; error type</button></div>
       <input type="search" id="q" placeholder="Part no., supplier, CAS, substance…" value="${esc(UI.q)}">
       <select id="f-status"><option value="">All statuses</option>${WORKSPACE_STATUSES.map(([v, l]) => `<option value="${v}" ${UI.status === v ? "selected" : ""}>${esc(l)}</option>`).join("")}</select>
       <select id="f-route"><option value="">All routes</option>${["Supplier", "Purchasing", "Internal", "Approval", "Escalation (TMC/TMNA/TME/TDEM)"].map((s) => `<option ${UI.route === s ? "selected" : ""}>${s}</option>`).join("")}</select>
@@ -1686,7 +1743,7 @@ function viewRegister() {
     ${S.records.length ? "" : `<p class="small">No records yet. Go to <b>Daily G-CATS Update</b> to import the Error Check Log, or load the July 2024 sample.</p>`}
   </div>
   <div class="wrap ${sel ? "open" : ""}" style="margin-top:14px">
-    <div class="card w tablebox"><table><thead><tr><th>Part No.</th><th>Supplier</th><th>Error category</th><th class="hide-open">CAS / substance</th><th class="hide-open">Value</th><th>Next step / recommendation</th><th>Status</th></tr></thead><tbody>
+    ${UI.grouped ? groupedHtml(rows) : `<div class="card w tablebox"><table><thead><tr><th>Part No.</th><th>Supplier</th><th>Error category</th><th class="hide-open">CAS / substance</th><th class="hide-open">Value</th><th>Next step / recommendation</th><th>Status</th></tr></thead><tbody>
     ${rows.slice(0, 600).map((it) => { const r = it.record, e = it.evaluation; const g = GROUP_OF.get(it.key);
       return `<tr class="row ${UI.sel === it.key ? "sel" : ""}" data-k="${esc(it.key)}">
       <td class="mono">${esc(r.deliveryPartNo)}<div class="small">${esc((r.deliveryPartName || "").slice(0, 28))}</div></td>
@@ -1696,7 +1753,7 @@ function viewRegister() {
       <td class="mono hide-open">${r.contentPct != null ? esc(r.contentPct) + " wt%" : r.deliveryMass != null ? esc(+(+r.deliveryMass).toFixed(2)) + " g" : "—"}</td>
       <td>${finalOf(it) ? esc(finalOf(it).comment) : esc(e.pendingQuestion ? e.pendingQuestion.question.split(": ")[0] : (e.comment || e.reasons[0] || "").slice(0, 90))}<div><span class="tag t-route">${finalOf(it) ? "Done" : esc(e.routeTo)}</span></div></td>
       <td>${statusTag(it)}</td></tr>`; }).join("")}
-    </tbody></table>${rows.length > 600 ? `<p class="small">Showing 600 of ${rows.length}; refine the filter.</p>` : ""}</div>
+    </tbody></table>${rows.length > 600 ? `<p class="small">Showing 600 of ${rows.length}; refine the filter.</p>` : ""}</div>`}
     ${sel ? drawer(sel) : ""}
   </div>`;
   $("#q").oninput = (ev) => { UI.q = ev.target.value; const p = ev.target.selectionStart; render(); const q = $("#q"); q.focus(); q.setSelectionRange(p, p); };
@@ -1710,7 +1767,122 @@ function viewRegister() {
   const cp = $("#clear-pending"); if (cp) cp.onclick = () => { UI.pendingOnly = false; render(); };
   document.querySelectorAll("[data-cat]").forEach((b) => (b.onclick = () => { UI.cat = b.dataset.cat; render(); }));
   document.querySelectorAll("tr.row").forEach((tr) => (tr.onclick = () => { UI.sel = tr.dataset.k; UI.decision = null; render(); }));
+  document.querySelectorAll("[data-mode]").forEach((b) => (b.onclick = () => { UI.grouped = b.dataset.mode === "group"; UI.sel = null; render(); }));
+  if (UI.grouped) bindGrouped(rows);
   if (sel) bindDrawer(sel);
+}
+
+// ---------------- Judgment Workspace: grouped view ----------------
+const STATUS_CLS = { RECOMMEND_OK: "t-ok", RECOMMEND_NG: "t-ng", AWAITING_INPUT: "t-wait", NEED_SUPPLIER: "t-wait", NEED_TMC: "t-wait", NEED_HUMAN_REVIEW: "t-rev", WORKING: "t-rev" };
+const caseDesc = (it) => { const r = it.record; return [r.componentPartName || r.deliveryPartName, r.materialName, r.cas ? "CAS " + r.cas : ""].filter(Boolean).join(" · ").slice(0, 70); };
+const plural = (n, w, ws) => `${n} ${n === 1 ? w : ws || w + "s"}`;
+function groupedHtml(rows) {
+  const full = new Map(judgmentGroups(ITEMS).groups.map((g) => [g.id, g]));
+  const { groups, loose } = judgmentGroups(rows);                      // what the filters let through
+  const mine = groups.filter((g) => !UI.groupSup || UI.groupSup.includes(g.code));
+  const todo = mine.filter((g) => g.open.length).sort((a, b) => b.open.length - a.open.length || a.code.localeCompare(b.code) || a.cat.localeCompare(b.cat));
+  const done = mine.filter((g) => !g.open.length);
+  const shown = UI.groupShowDone ? [...todo, ...done] : todo;
+  const u = user(), canFinal = u.role === "Approver" || u.role === "Administrator";
+  const looseOpen = UI.groupSup ? [] : loose.filter((i) => !finalOf(i));
+  const cases = todo.reduce((n, g) => n + g.open.length, 0);
+  return `<div class="grp-wrap">
+    <div class="grp-bar"><div><b>${plural(todo.length, "group")}</b> waiting for a judgment · ${plural(cases, "case")} can be closed in ${plural(todo.length, "step")}
+      <div class="small">Grouped by <b>supplier code</b> and <b>error type</b> together — different suppliers or different error types are never mixed.</div></div>
+      <div class="chips" style="margin:0">${UI.groupSup ? `<button class="chip on" id="grp-sup-clear">Supplier ${esc(UI.groupSup.join(", "))} only ✕</button>` : ""}
+        ${done.length ? `<button class="chip ${UI.groupShowDone ? "on" : ""}" id="grp-done">${UI.groupShowDone ? "Hide" : "Show"} ${plural(done.length, "finished group")}</button>` : ""}</div></div>
+    ${canFinal ? "" : `<div class="box ask">Your role (${esc(u.role)}) can review the groups, but only an <b>Approver</b> or <b>Administrator</b> records a final OK / NG. Switch role in the sidebar.</div>`}
+    <div class="grps">${shown.map((g) => groupCard(g, full.get(g.id), canFinal)).join("")
+      || `<div class="card empty"><h3>${S.records.length ? "No group is waiting for a judgment" : "No records yet"}</h3><p class="small">${S.records.length ? (UI.groupSup || UI.q || UI.cat !== "All" || UI.status || UI.route ? "Clear the filters to see every group." : "Everything that can be grouped has been judged.") : "Import the G-CATS Error Check Log under Daily G-CATS Update first."}</p></div>`}</div>
+    ${looseOpen.length ? `<div class="card" style="margin-top:14px"><h3>Judge on their own</h3><p class="hint">${plural(looseOpen.length, "case")} without a supplier code or error type — ${looseOpen.length === 1 ? "it" : "they"} can't be grouped safely.</p>
+      <ul class="grp-parts">${looseOpen.map((it) => `<li><span></span><span class="mono">${esc(it.record.deliveryPartNo || "—")}</span><span class="small grp-desc">${esc(it.evaluation.errorCategory)} · ${esc(it.record.companyName || "no supplier code")}</span>${statusTag(it)}<button class="linkbtn" data-openk="${esc(it.key)}">Open ›</button></li>`).join("")}</ul></div>` : ""}
+  </div>`;
+}
+function groupCard(g, full, canFinal) {
+  const [cls, label] = groupState(full), off = UI.groupOff || {};
+  const sel = g.open.filter((i) => !off[i.key]), selParts = new Set(sel.map((i) => i.record.deliveryPartNo || "—")).size;
+  const hidden = full.items.length - g.items.length;
+  const eng = {}; g.open.forEach((i) => { const k = statusKey(i); eng[k] = (eng[k] || 0) + 1; });
+  const together = full.final.filter((i) => finalOf(i).bulk && finalOf(i).bulk.supplierCode === g.code && finalOf(i).bulk.errorCategory === g.cat).length;
+  const line = (it) => { const can = !finalOf(it) && !tmcHeld(it), on = can && !off[it.key];
+    return `<li class="${on ? "" : "off"}"><input type="checkbox" data-gk="${esc(it.key)}" aria-label="Include ${esc(it.record.deliveryPartNo)}" ${can ? (on ? "checked" : "") : "disabled"}>
+      <span class="mono">${esc(it.record.deliveryPartNo || "—")}</span><span class="small grp-desc">${esc(caseDesc(it))}</span>${statusTag(it)}<button class="linkbtn" data-openk="${esc(it.key)}" title="Open this case on its own">Open ›</button></li>`; };
+  return `<section class="card w grp" data-gid="${esc(g.id)}">
+    <div class="grp-head"><div><div class="crumb">Error type</div><h3>${esc(g.cat)}</h3></div><span class="tag ${cls}">${esc(label)}</span></div>
+    <div class="grp-body">
+      <div class="grp-sup"><div><b>${esc(g.companies[0] || "Supplier " + g.code)}</b><div class="small">Supplier code <span class="mono">${esc(g.code)}</span>${g.companies.length > 1 ? ` · <span class="warn">⚠ ${g.companies.length} company names under this code</span>` : ""}</div></div>
+        <div class="grp-n"><b>${full.parts.length}</b><span>part number${full.parts.length === 1 ? "" : "s"}${full.items.length !== full.parts.length ? ` · ${full.items.length} cases` : ""}</span></div></div>
+      ${g.open.length ? `<div class="grp-eng">${Object.entries(eng).map(([k, n]) => `<span class="tag ${STATUS_CLS[k] || "t-route"}">${n} ${esc(STATUS_LABEL[k] || k)}</span>`).join("")}${g.open.length > 1 ? `<span class="grp-pick"><button class="linkbtn" data-gall="1">Select all</button> · <button class="linkbtn" data-gall="0">none</button></span>` : ""}</div>` : ""}
+      <ul class="grp-parts">${g.items.map(line).join("")}</ul>
+      ${hidden ? `<div class="small">${plural(hidden, "more case")} in this group ${hidden === 1 ? "is" : "are"} hidden by the current filter and won't be changed.</div>` : ""}
+      ${g.held.length ? `<div class="small warn">⚠️ ${plural(g.held.length, "case")} must be confirmed to TMC / TMNA first — left out of the group judgment.</div>` : ""}
+      ${g.open.length ? `<div class="grp-actions"><button class="gb ok" data-bulk="OK" ${canFinal && sel.length ? "" : "disabled"}>✓ Judge all OK</button><button class="gb ng" data-bulk="NG" ${canFinal && sel.length ? "" : "disabled"}>⊗ Judge all NG</button></div>
+        <div class="small grp-foot">${sel.length ? `Applies to <b>${plural(selParts, "part number")}</b>${sel.length !== selParts ? ` (${sel.length} cases)` : ""} — you confirm before anything is saved.` : "Tick at least one part number."}</div>` : ""}
+      ${together && canFinal ? `<button class="btn grp-reopen" data-reopen-grp="1">↺ Re-open the ${together} judged together</button>` : ""}
+    </div></section>`;
+}
+function bindGrouped(rows) {
+  const find = (el) => { const id = el.closest("[data-gid]").dataset.gid; return judgmentGroups(filtered()).groups.find((g) => g.id === id); };
+  const off = (UI.groupOff = UI.groupOff || {});
+  const sc = $("#grp-sup-clear"); if (sc) sc.onclick = () => { UI.groupSup = null; render(); };
+  const gd = $("#grp-done"); if (gd) gd.onclick = () => { UI.groupShowDone = !UI.groupShowDone; render(); };
+  document.querySelectorAll("[data-gk]").forEach((c) => (c.onchange = () => { if (c.checked) delete off[c.dataset.gk]; else off[c.dataset.gk] = true; render(); }));
+  document.querySelectorAll("[data-gall]").forEach((b) => (b.onclick = () => { for (const it of find(b).open) { if (b.dataset.gall === "1") delete off[it.key]; else off[it.key] = true; } render(); }));
+  document.querySelectorAll("[data-openk]").forEach((b) => (b.onclick = () => { UI.sel = b.dataset.openk; UI.decision = null; render(); }));
+  document.querySelectorAll("[data-bulk]").forEach((b) => (b.onclick = () => { const g = find(b); if (g) confirmGroupJudgment(g, b.dataset.bulk); }));
+  document.querySelectorAll("[data-reopen-grp]").forEach((b) => (b.onclick = () => {
+    const g = judgmentGroups(ITEMS).groups.find((x) => x.id === b.closest("[data-gid]").dataset.gid); if (!g) return;
+    if (!confirm(`Re-open the cases of ${g.cat} · supplier ${g.code} that were judged together?\nThey go back to pending; the re-open is logged in History.`)) return;
+    const n = reopenGroupJudgment(g); toast(`${plural(n, "case")} re-opened`); render();
+  }));
+}
+/** The confirmation step before a group judgment: shows exactly which part numbers change, where
+ *  the decision goes against the engine, and asks for the same comment the single-case flow does. */
+function confirmGroupJudgment(g, dec) {
+  const off = UI.groupOff || {}, members = g.open.filter((i) => !off[i.key]);
+  if (!members.length) return toast("Tick at least one part number");
+  const parts = new Set(members.map((m) => m.record.deliveryPartNo || "—")).size, n = members.length;
+  const over = members.filter((m) => isOverrideFor(m, dec)), agree = members.filter((m) => !isOverrideFor(m, dec));
+  const overWhy = {}; over.forEach((m) => { const k = STATUS_LABEL[statusKey(m)] || statusKey(m); overWhy[k] = (overWhy[k] || 0) + 1; });
+  const common = (list) => { const c = [...new Set(list.map((m) => (m.evaluation.comment || "").trim()).filter(Boolean))]; return c.length === 1 ? c[0] : ""; };
+  const word = dec === "OK" ? "OK" : "NG", u = user();
+  showModal(`<button class="x" data-close aria-label="Close">×</button>
+    <div class="crumb">Group judgment · please confirm</div>
+    <h2 id="modal-title">Judge ${plural(parts, "part number")} <span class="dec-${word.toLowerCase()}">${word}</span>?</h2>
+    <div class="small">Error type <b>${esc(g.cat)}</b> · Supplier <b>${esc(g.companies[0] || "—")}</b> · code <span class="mono">${esc(g.code)}</span>${n !== parts ? ` · ${n} cases` : ""}</div>
+    <ul class="grp-parts modal-parts">${members.map((m) => `<li><span></span><span class="mono">${esc(m.record.deliveryPartNo || "—")}</span><span class="small grp-desc">${esc(caseDesc(m))}</span>${statusTag(m)}<span></span></li>`).join("")}</ul>
+    <div class="box ${over.length ? "ask" : word === "OK" ? "rec-ok" : "rec-ng"}"><b>${agree.length} of ${n}</b> match the engine's recommendation (${word}).${over.length
+      ? ` <b>${over.length}</b> ${over.length === 1 ? "does" : "do"} not (${Object.entries(overWhy).map(([k, c]) => `${c} ${esc(k)}`).join(", ")}) — for ${over.length === 1 ? "that case" : "those"} your decision is an override, so a justification is required.` : ""}</div>
+    <label class="l" for="bk-cmt">Comment — record of changing to "OK" (required, saved on every case)</label><textarea id="bk-cmt">${esc(common(agree))}</textarea>
+    ${word === "NG" ? `<label class="l" for="bk-rej">IMDS reject comment (sent to the supplier)</label><textarea id="bk-rej">${esc(common(members))}</textarea>` : ""}
+    ${over.length ? `<label class="l" for="bk-just">Override justification (required)</label><textarea id="bk-just"></textarea>` : ""}
+    <label class="ack"><input type="checkbox" id="bk-ack"><span>I have reviewed ${n === 1 ? "this case" : `these ${n} cases`} and want <b>${word}</b> recorded for ${n === 1 ? "it" : "all of them"}.</span></label>
+    <div id="bk-err"></div>
+    <div class="modal-actions"><button class="btn" data-close>Cancel</button><button class="gb ${word.toLowerCase()}" id="bk-go" disabled>Apply ${word} to ${plural(parts, "part number")}</button></div>
+    <div class="small" style="margin-top:8px">Recorded with your name (${esc(u.user)}), role (${esc(u.role)}) and the time. Each case can still be re-opened on its own.</div>`, (box) => {
+    const go = $("#bk-go", box), ack = $("#bk-ack", box);
+    ack.onchange = () => (go.disabled = !ack.checked);
+    go.onclick = () => {
+      try {
+        const res = applyGroupJudgment(g, word, members, $("#bk-cmt", box).value, $("#bk-just", box) ? $("#bk-just", box).value : undefined, $("#bk-rej", box) ? $("#bk-rej", box).value : "");
+        closeModal();
+        for (const m of members) delete (UI.groupOff || {})[m.key];
+        toast(res.wrong ? `⚠ ${res.wrong} of ${res.n} cases did not save as ${word} — please check them` : `${word} recorded for ${plural(res.parts, "part number")}${res.n !== res.parts ? ` (${res.n} cases)` : ""} · ${g.cat} · ${g.code}`);
+        render();
+      } catch (err) { $("#bk-err", box).innerHTML = `<div class="box rec-ng">${esc(err.message)}</div>`; }
+    };
+  });
+}
+function modalKey(e) { if (e.key === "Escape") closeModal(); }
+function closeModal() { const m = $("#modal"); if (m) m.remove(); document.removeEventListener("keydown", modalKey); }
+function showModal(html, bind) {
+  closeModal();
+  const bg = document.createElement("div"); bg.className = "modal-bg"; bg.id = "modal";
+  bg.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">${html}</div>`;
+  document.body.appendChild(bg);
+  bg.onclick = (e) => { if (e.target === bg || e.target.closest("[data-close]")) closeModal(); };
+  document.addEventListener("keydown", modalKey);
+  bind(bg); const first = bg.querySelector("textarea"); if (first) first.focus();
 }
 
 function chainHtml(c) {
@@ -1893,12 +2065,20 @@ function viewSelfCheck() {
     <button class="kpi"><span>Last updated</span><b style="font-size:19px">${lastUpd ? esc(lastUpd.slice(0, 10)) : "—"}</b><em>${lastUpd ? esc(lastUpd.slice(11, 16)) : "nothing yet"}</em></button>
   </div>
 
+  <div class="drop sc-drop" id="self-drop" tabindex="0" role="button" aria-label="Drop self-check files here, or press Enter to choose files">
+    <span class="sc-drop-ico">${ICO.up}</span>
+    <b>Drop self-check files here</b>
+    <span class="small">IMDS Information Form <b>.xlsx</b> — several at once · <b>CSV</b> · library backup <b>.json</b> · or copy cells in Excel and press <b>Ctrl+V</b> on this page</span>
+    <span class="small">or <u>choose files</u> · typing an entry by hand still works with <b>+ Add entry</b></span>
+  </div>
+  ${UI.selfDrop ? selfDropResult(UI.selfDrop) : ""}
+
   <div class="card w">
     <div class="tools">
       <input type="search" id="selfq" placeholder="Search part name, part number, company, supplier code, CAS…" value="${esc(UI.selfQ || "")}">
       <button class="btn pri" id="self-add">+ Add entry</button>
       <button class="btn" id="self-import">⬆ Import sheet</button>
-      <input type="file" id="self-file" accept=".xlsx" hidden>
+      <input type="file" id="self-file" accept=".xlsx,.xlsm,.csv,.tsv,.txt,.json" multiple hidden>
       <button class="btn" id="self-xlsx">⬇ Excel</button>
       <button class="btn" id="self-backup">⬇ Backup</button>
       <button class="btn" id="self-restore">⬆ Restore</button>
@@ -1945,7 +2125,7 @@ function viewSelfCheck() {
 
   ${subs.length ? `<div class="card" style="margin-top:14px"><h3>Where the entries came from</h3>
     <table><thead><tr><th>Source</th><th>Supplier</th><th>Entries</th><th>Added</th><th></th></tr></thead><tbody>
-    ${subs.slice().reverse().map((s) => `<tr><td class="small">${s.source === "manual" ? `<span class="tag t-rev">Typed in</span> ` : ""}${esc(s.file)}</td>
+    ${subs.slice().reverse().map((s) => `<tr><td class="small">${s.source === "manual" ? `<span class="tag t-rev">Typed in</span> ` : s.source === "paste" ? `<span class="tag t-rev">Pasted</span> ` : ""}${esc(s.file)}</td>
       <td class="mono small">${esc(s.supplierCode || "—")}<div class="small">${esc((s.companyName || "").slice(0, 24))}</div></td>
       <td>${s.rows.length}</td><td class="mono small">${esc(s.importedAt.replace("T", " ").slice(0, 16))}</td>
       <td><button class="btn" data-rmself="${esc(s.id)}">Remove</button></td></tr>`).join("")}
@@ -1989,26 +2169,13 @@ function viewSelfCheck() {
   }));
 
   $("#self-import").onclick = () => $("#self-file").click();
-  $("#self-file").onchange = async (ev) => {
-    const file = ev.target.files[0]; if (!file) return;
-    const msg = $("#self-msg");
-    msg.innerHTML = `<div class="small" style="margin-top:8px">Reading ${esc(file.name)} …</div>`;
-    try {
-      const buf = await file.arrayBuffer();
-      const formRows = await readXlsx(buf, { sheet: (n) => /information\s*form/i.test(n), sheetError: 'No "IMDS Information Form" sheet in this workbook' });
-      const rows = parseSelfCheckForm(formRows);
-      if (!rows.length) throw new Error("No supplier lines filled in on the IMDS Information Form sheet — only the EXAMPLE row, which is skipped");
-      let contacts = [];
-      try { contacts = parseContacts(await readXlsx(buf, { sheet: (n) => /contact/i.test(n) })); } catch (e) {}
-      S.selfChecks.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, file: file.name, source: "import",
-        importedAt: new Date().toISOString(), supplierCode: rows[0].supplierCode || "", companyName: rows[0].companyName || "",
-        submittedDate: rows.map((r) => r.submissionDate).find(Boolean) || "", rows, contacts });
-      S.audit.push({ at: new Date().toISOString(), ...user(), action: "SELFCHECK_IMPORT", detail: `${file.name}: ${rows.length} lines, ${contacts.length} contacts` });
-      evaluateAndAutoJudge();
-      const sc = ITEMS.filter((i) => i.evaluation.trace.some((t) => t.viaSelfCheck)).length;
-      save(); toast(`${rows.length} entr${rows.length === 1 ? "y" : "ies"} added to the library · ${sc} case${sc === 1 ? "" : "s"} answered from supplier sheets`); render();
-    } catch (e) { msg.innerHTML = `<div class="box rec-ng" style="margin-top:8px">${esc(e.message)}</div>`; }
-  };
+  $("#self-file").onchange = (ev) => { const files = [...ev.target.files]; ev.target.value = ""; if (files.length) importSelfBatch(files); };
+  const dz = $("#self-drop");
+  dz.onclick = () => $("#self-file").click();
+  dz.onkeydown = (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); $("#self-file").click(); } };
+  const dr = $("#drop-close"); if (dr) dr.onclick = () => { UI.selfDrop = null; render(); };
+  const dg = $("#drop-groups"); if (dg) dg.onclick = () => openGroupJudgment(UI.selfDrop.codes);
+  document.querySelectorAll("[data-gogroup]").forEach((b) => (b.onclick = () => openGroupJudgment([b.dataset.gogroup])));
   const swUse = $("#sw-use"), swAuto = $("#sw-auto");
   if (swUse) swUse.onchange = () => { S.settings.selfCheckUse = swUse.checked; S.audit.push({ at: new Date().toISOString(), ...user(), action: "RULE_CHANGE", detail: `selfCheckUse = ${swUse.checked}` }); save(); evaluateAndAutoJudge(); render(); };
   if (swAuto) swAuto.onchange = () => { S.settings.selfCheckAuto = swAuto.checked; S.audit.push({ at: new Date().toISOString(), ...user(), action: "RULE_CHANGE", detail: `selfCheckAuto = ${swAuto.checked}` }); save(); evaluateAndAutoJudge(); render(); };
@@ -2370,8 +2537,8 @@ function viewHistory() {
   const a = [...S.audit].reverse();
   $("#main").innerHTML = header("WORK / HISTORY", "Auto-Judgement History", "Every answer, approval, override and re-open with user and timestamp.") +
   `<div class="card tablebox"><table><thead><tr><th>When</th><th>User</th><th>Action</th><th>Part</th><th>Detail</th></tr></thead><tbody>
-  ${a.slice(0, 1000).map((x) => `<tr><td class="mono">${esc((x.at || "").replace("T", " ").slice(0, 19))}</td><td>${esc(x.user)}<div class="small">${esc(x.role)}</div></td><td><span class="tag ${x.action === "OVERRIDE" ? "t-rev" : x.action === "APPROVE" ? "t-ok" : "t-route"}">${esc(x.action)}</span></td><td class="mono">${esc(x.part || "")}</td>
-  <td>${x.key ? `${esc(x.key)} = ${esc(x.value ?? "(removed)")}` : x.newStatus ? `${esc(x.newStatus)} · AI ${esc(x.aiRecommendation || "none")} · ${esc(x.comment)}${x.justification ? " · just.: " + esc(x.justification) : ""}${x.groupRepresentative ? " · grouped" : ""}` : x.action === "REOPEN" ? "re-opened" : x.action === "IMPORT" ? esc(x.detail) : ""}</td></tr>`).join("") || `<tr><td colspan="5" class="small">No activity yet.</td></tr>`}
+  ${a.slice(0, 1000).map((x) => `<tr><td class="mono">${esc((x.at || "").replace("T", " ").slice(0, 19))}</td><td>${esc(x.user)}<div class="small">${esc(x.role)}</div></td><td><span class="tag ${x.action === "OVERRIDE" ? "t-rev" : x.action === "APPROVE" || x.action === "BULK_JUDGE" ? "t-ok" : "t-route"}">${esc(x.action)}</span></td><td class="mono">${esc(x.part || "")}</td>
+  <td>${x.key ? `${esc(x.key)} = ${esc(x.value ?? "(removed)")}` : x.newStatus ? `${esc(x.newStatus)} · AI ${esc(x.aiRecommendation || "none")} · ${esc(x.comment)}${x.justification ? " · just.: " + esc(x.justification) : ""}${x.bulk ? ` · group judgment (${esc(x.bulk.errorCategory)} · supplier ${esc(x.bulk.supplierCode)})` : x.groupRepresentative ? " · grouped" : ""}` : x.action === "REOPEN" ? `re-opened${x.detail ? " — " + esc(x.detail) : ""}` : esc(x.detail || "")}</td></tr>`).join("") || `<tr><td colspan="5" class="small">No activity yet.</td></tr>`}
   </tbody></table></div>`;
 }
 
@@ -2486,9 +2653,12 @@ function parseSelfCheckForm(rows) {
   if (h < 0) throw new Error('Sheet has no header row with "SUPPLIER CODE" and "PART NUMBER" — is this the IMDS Information Form?');
   const cols = rows[h].map(upper);
   const idx = {};
+  // the library's own Excel export / a hand-made CSV use the on-screen labels instead of the sheet's
+  const alt = Object.fromEntries(SELF_FORM.flatMap(([, fs]) => fs).map(([k, l]) => [k, upper(l)]));
   for (const [field, label] of SELF_FIELDS) {
     let i = cols.indexOf(label);
     if (i < 0) i = cols.findIndex((c) => c && c.startsWith(label));
+    if (i < 0 && alt[field]) i = cols.indexOf(alt[field]);
     idx[field] = i;
   }
   const val = (r, i) => { if (i == null || i < 0) return null; const s = r[i] == null ? "" : String(r[i]).trim(); return s === "" || s === "***" ? null : s; };
@@ -2579,6 +2749,212 @@ function restoreSelfLibrary(text, mode) {
   S.audit.push({ at: new Date().toISOString(), ...user(), action: "SELFCHECK_RESTORE", detail: `${incoming.length} submission(s) ${mode === "replace" ? "replaced" : "merged"} from backup` });
   save();
   return incoming.length;
+}
+
+// ---------------- Drag & drop: self-check files and pasted cells ----------------
+/** Split CSV / TSV text (a saved CSV, or cells copied out of Excel) into rows. Quoted cells may
+ *  hold the delimiter and line breaks, as Excel writes them. */
+function parseDelimited(text) {
+  text = String(text || "").replace(/^﻿/, "");
+  const first = text.split(/\r?\n/, 1)[0] || "";
+  const delim = first.includes("\t") ? "\t" : first.split(";").length > first.split(",").length ? ";" : ",";
+  const rows = []; let row = [], cell = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; continue; }
+    if (ch === '"' && cell === "") { q = true; continue; }
+    if (ch === delim) { row.push(cell); cell = ""; continue; }
+    if (ch === "\n" || ch === "\r") { if (ch === "\r" && text[i + 1] === "\n") i++; row.push(cell); rows.push(row); row = []; cell = ""; continue; }
+    cell += ch;
+  }
+  if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter((r) => r.some((c) => String(c).trim() !== ""));
+}
+const selfSig = (rows) => JSON.stringify(rows.map((r) => SELF_FIELDS.filter(([k]) => k !== "no").map(([k]) => r[k] ?? null)));
+const looksLikeGcats = (rows) => rows.slice(0, 12).some((r) => r && r.some((c) => upper(c) === "ERROR TYPE"));
+/** Add one parsed sheet to the library. Returns null when exactly the same lines are already
+ *  there, so dropping the same file twice does not create a second version. */
+function addSelfSubmission(name, source, rows, contacts = []) {
+  const sig = selfSig(rows);
+  if ((S.selfChecks || []).some((s) => selfSig(s.rows) === sig)) return null;
+  const sub = { id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, file: name, source,
+    importedAt: new Date().toISOString(), supplierCode: rows[0].supplierCode || "", companyName: rows[0].companyName || "",
+    submittedDate: rows.map((r) => r.submissionDate).find(Boolean) || "", rows, contacts };
+  S.selfChecks.push(sub);
+  S.audit.push({ at: sub.importedAt, ...user(), action: "SELFCHECK_IMPORT", detail: `${name}: ${rows.length} lines, ${contacts.length} contacts` });
+  return sub;
+}
+const sheetResult = (name, rows, sub, contacts = []) => ({ name, lines: rows.length, dup: !sub, contacts: contacts.length,
+  codes: [...new Set(rows.map((r) => supNorm(r.supplierCode)).filter(Boolean))], company: rows.map((r) => r.companyName).find(Boolean) || "" });
+/** Read one dropped or chosen file into the library. */
+async function importSelfFile(file) {
+  const name = file.name || "file", ext = ((name.match(/\.([a-z0-9]+)$/i) || [])[1] || "").toLowerCase();
+  if (ext === "xls") throw new Error("Old .xls format — open it in Excel, save it as .xlsx, then drop it again");
+  if (ext === "json") {
+    const before = new Set((S.selfChecks || []).map((s) => s.id));
+    restoreSelfLibrary(await file.text(), "merge");
+    const added = S.selfChecks.filter((s) => !before.has(s.id)), rows = added.flatMap((s) => s.rows);
+    return { name, backup: true, subs: added.length, lines: rows.length, dup: !added.length, codes: [...new Set(rows.map((r) => supNorm(r.supplierCode)).filter(Boolean))] };
+  }
+  let table, contacts = [];
+  if (ext === "xlsx" || ext === "xlsm") {
+    const buf = await file.arrayBuffer();
+    // the supplier template has an "IMDS Information Form" sheet; a library export or a plain list uses its first sheet
+    try { table = await readXlsx(buf, { sheet: (n) => /information\s*form/i.test(n) }); } catch (e) { table = await readXlsx(buf, { sheet: 0 }); }
+    try { contacts = parseContacts(await readXlsx(buf, { sheet: (n) => /contact/i.test(n) })); } catch (e) {}
+  } else if (["csv", "tsv", "txt"].includes(ext) || /^text\//.test(file.type || "")) {
+    table = parseDelimited(await file.text());
+  } else throw new Error("Not a self-check file — use the IMDS Information Form (.xlsx), a CSV, or a library backup (.json)");
+  if (looksLikeGcats(table)) throw new Error("This is a G-CATS Error Check Log — import it under Daily G-CATS Update instead");
+  const rows = parseSelfCheckForm(table);
+  if (!rows.length) throw new Error("No supplier lines filled in — only the EXAMPLE row (which is skipped) or empty rows");
+  return sheetResult(name, rows, addSelfSubmission(name, "import", rows, contacts), contacts);
+}
+/** Run dropped / chosen files and pasted cells through the library, then re-judge once, so a
+ *  supplier's answers reach the Judgment Workspace and the groups straight away. */
+async function importSelfBatch(files = [], pastedText = "") {
+  const dz = $("#self-drop"); if (dz) dz.classList.add("busy");
+  const before = new Set(Object.keys(S.approvals)), results = [];
+  for (const f of files) { try { results.push(await importSelfFile(f)); } catch (e) { results.push({ name: f.name || "file", error: e.message }); } }
+  if (pastedText) {
+    const name = `Pasted cells · ${new Date().toISOString().slice(0, 16).replace("T", " ")}`;
+    try {
+      const table = parseDelimited(pastedText);
+      if (looksLikeGcats(table)) throw new Error("These are G-CATS Error Check Log rows — import the log under Daily G-CATS Update instead");
+      const rows = parseSelfCheckForm(table);
+      if (!rows.length) throw new Error("No supplier lines in the pasted cells");
+      results.push(sheetResult(name, rows, addSelfSubmission(name, "paste", rows)));
+    } catch (e) { results.push({ name: "Pasted cells", error: /header row/.test(e.message) ? 'Copy the header row too — the cells need at least "Supplier code" and "Part number" columns' : e.message }); }
+  }
+  if (results.some((r) => !r.error && !r.dup)) evaluateAndAutoJudge();
+  const codes = [...new Set(results.flatMap((r) => r.codes || []))];
+  const auto = Object.keys(S.approvals).filter((k) => !before.has(k)).length;
+  const answered = ITEMS.filter((i) => codes.includes(supNorm(i.record.supplierCode)) && i.evaluation.trace.some((t) => t.viaSelfCheck)).length;
+  save();
+  UI.selfDrop = { at: new Date().toISOString(), results, codes, auto, answered };
+  const ok = results.filter((r) => !r.error && !r.dup).length;
+  toast(ok ? `${results.reduce((n, r) => n + (!r.error && !r.dup ? r.lines : 0), 0)} line(s) added from ${ok} source${ok === 1 ? "" : "s"}${auto ? ` · ${auto} case${auto === 1 ? "" : "s"} judged OK automatically` : ""}` : "Nothing new was added — see the upload result");
+  if (UI.view === "selfcheck") render();
+}
+/** The panel shown after a drop: what was read, and the supplier × error-type groups it touches. */
+function selfDropResult(d) {
+  const groups = judgmentGroups(ITEMS).groups.filter((g) => d.codes.includes(g.code));
+  const open = groups.filter((g) => g.open.length).sort((a, b) => b.open.length - a.open.length);
+  return `<div class="card w drop-result"><button class="x" id="drop-close" title="Close">×</button><h3>Upload result</h3>
+    <ul class="drop-files">${d.results.map((r) => `<li class="${r.error ? "bad" : r.dup ? "dup" : "good"}"><b>${r.error ? "✗" : r.dup ? "↺" : "✓"}</b><div><span class="mono">${esc(r.name)}</span>
+      <div class="small">${r.error ? esc(r.error) : r.dup ? "Already in the library — skipped, nothing changed" : r.backup ? `${r.subs} submission(s), ${r.lines} line(s) merged from the backup`
+        : `${r.lines} line${r.lines === 1 ? "" : "s"} · supplier ${esc(r.codes.join(", ") || "—")}${r.company ? " " + esc(r.company) : ""}${r.contacts ? ` · ${r.contacts} contact${r.contacts === 1 ? "" : "s"}` : ""}`}</div></div></li>`).join("")}</ul>
+    ${d.answered || d.auto ? `<div class="small" style="margin-top:8px">${d.answered} register case${d.answered === 1 ? "" : "s"} for ${d.codes.length === 1 ? "this supplier" : "these suppliers"} answered from the self-check${d.auto ? ` · <b>${d.auto} judged OK automatically</b>` : ""}</div>` : ""}
+    ${open.length ? `<div class="drop-groups"><b class="small" style="color:var(--brand2)">READY FOR GROUP JUDGMENT · same supplier code × same error type</b>
+      <div class="chips">${open.slice(0, 12).map((g) => `<button class="chip" data-gogroup="${esc(g.code)}">${esc(g.code)} · ${esc(g.cat)}<i>${g.openParts} part${g.openParts === 1 ? "" : "s"}</i></button>`).join("")}${open.length > 12 ? `<span class="small">+ ${open.length - 12} more</span>` : ""}</div>
+      <button class="btn pri" id="drop-groups">Open group judgment for ${d.codes.length === 1 ? "this supplier" : `these ${d.codes.length} suppliers`} →</button></div>`
+      : d.codes.length && S.records.length ? `<div class="small" style="margin-top:6px">No open register cases for ${esc(d.codes.join(", "))} — nothing waiting for a judgment.</div>` : ""}
+  </div>`;
+}
+/** Drag & drop and paste anywhere on the Supplier Self-Check screen. Outside that screen a stray
+ *  drop is swallowed, so a file dropped by mistake never replaces the app in the browser tab. */
+(function wireSelfDrop() {
+  const hasFiles = (dt) => dt && [...(dt.types || [])].includes("Files");
+  const isField = (el) => el && el.closest && el.closest("input,textarea,select,[contenteditable]");
+  const ours = (e) => e.dataTransfer && !e.defaultPrevented && !isField(e.target) && (hasFiles(e.dataTransfer) || UI.view === "selfcheck");
+  let t;
+  document.addEventListener("dragover", (e) => {
+    if (!ours(e)) return;
+    e.preventDefault();
+    if (UI.view !== "selfcheck") { e.dataTransfer.dropEffect = "none"; return; }
+    e.dataTransfer.dropEffect = "copy";
+    const dz = $("#self-drop"); if (dz) { dz.classList.add("over"); clearTimeout(t); t = setTimeout(() => dz.classList.remove("over"), 160); }
+  });
+  document.addEventListener("drop", (e) => {
+    if (!ours(e)) return;
+    e.preventDefault();
+    if (UI.view !== "selfcheck") return;
+    const files = [...(e.dataTransfer.files || [])];
+    const text = hasFiles(e.dataTransfer) ? "" : e.dataTransfer.getData("text/plain");
+    if (files.length || text) importSelfBatch(files, text);
+  });
+  document.addEventListener("paste", (e) => {
+    if (UI.view !== "selfcheck" || !e.clipboardData) return;
+    const a = document.activeElement;
+    if (a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA" || a.isContentEditable)) return;   // normal typing
+    const files = [...(e.clipboardData.files || [])], text = e.clipboardData.getData("text/plain");
+    if (!files.length && !(text && /[\t,;]/.test(text) && /\n/.test(text.trim()))) return;
+    e.preventDefault(); importSelfBatch(files, files.length ? "" : text);
+  });
+})();
+
+// ---------------- Group judgment: same supplier code × same error type ----------------
+const supNorm = (c) => String(c ?? "").trim().toUpperCase();
+/** Cases grouped strictly by supplier code AND error type: two suppliers are never mixed, even
+ *  with the same error, and two error types are never mixed, even for the same supplier. A case
+ *  with no supplier code (or no error type) is never grouped — it is judged on its own. */
+function judgmentGroups(items) {
+  const m = new Map(), loose = [];
+  for (const it of items) {
+    const code = supNorm(it.record.supplierCode), cat = it.evaluation.errorCategory;
+    if (!code || !cat || cat === "(blank)") { loose.push(it); continue; }
+    const id = `${code}|${cat}`;
+    if (!m.has(id)) m.set(id, { id, code, cat, items: [] });
+    m.get(id).items.push(it);
+  }
+  const groups = [...m.values()];
+  for (const g of groups) {
+    g.items.sort((a, b) => String(a.record.deliveryPartNo || "").localeCompare(String(b.record.deliveryPartNo || "")));
+    g.companies = [...new Set(g.items.map((i) => String(i.record.companyName || "").trim()).filter(Boolean))];
+    g.parts = [...new Set(g.items.map((i) => i.record.deliveryPartNo || "—"))];
+    g.final = g.items.filter((i) => finalOf(i));
+    g.held = g.items.filter((i) => !finalOf(i) && tmcHeld(i));
+    g.open = g.items.filter((i) => !finalOf(i) && !tmcHeld(i));
+    g.openParts = new Set(g.open.map((i) => i.record.deliveryPartNo || "—")).size;
+  }
+  return { groups, loose };
+}
+/** Same test approve() applies: deciding against (or without) an engine recommendation is an override. */
+const isOverrideFor = (it, dec) => it.evaluation.recommendedJudge !== dec || it.evaluation.status === "NEED_HUMAN_REVIEW" || it.evaluation.status === "AWAITING_INPUT";
+function groupState(g) {
+  if (!g.final.length) return g.held.length && !g.open.length ? ["t-wait", "Confirm to TMC first"] : ["t-wait", "Pending"];
+  if (g.open.length || g.held.length) return ["t-rev", `Partly judged ${g.final.length}/${g.items.length}`];
+  const ok = g.final.every((i) => finalOf(i).newStatus === "FINAL_OK"), ng = g.final.every((i) => finalOf(i).newStatus === "FINAL_NG");
+  return ok ? ["t-ok", "Judged OK"] : ng ? ["t-ng", "Judged NG"] : ["t-rev", "Judged (mixed)"];
+}
+/** Record the same final OK / NG for every selected case of one group, in one step. Every entry is
+ *  built (and validated) first, so a missing comment or justification changes nothing at all. */
+function applyGroupJudgment(g, dec, members, comment, justification, imdsReject) {
+  const by = user(), bulkId = `G${Date.now().toString(36).toUpperCase()}`;
+  const live = members.map((m) => ITEMS.find((x) => x.key === m.key)).filter((m) => m && !finalOf(m) && !tmcHeld(m));
+  if (!live.length) throw new Error("Nothing left to judge in this group");
+  const bulk = { id: bulkId, supplierCode: g.code, errorCategory: g.cat, size: live.length, parts: new Set(live.map((m) => m.record.deliveryPartNo)).size };
+  const entries = live.map((m) => {
+    const entry = IMDS.approve(m.evaluation, by, dec, comment, isOverrideFor(m, dec) ? justification : undefined, bulkId);
+    Object.assign(entry, { part: m.record.deliveryPartNo, errorCategory: m.evaluation.errorCategory, supplierCode: m.record.supplierCode,
+      judgmentType: "Manual judgment (group)", bulk, evaluationSnapshot: { trace: m.evaluation.trace, substanceChain: m.evaluation.substanceChain } });
+    if (dec === "NG" && imdsReject && imdsReject.trim()) entry.imdsReject = imdsReject.trim();
+    return [m, entry];
+  });
+  for (const [m, entry] of entries) { S.approvals[m.key] = entry; delete S.flags[m.key]; S.audit.push({ ...entry }); }
+  S.audit.push({ at: new Date().toISOString(), ...by, action: "BULK_JUDGE", part: `${bulk.parts} part no.`,
+    detail: `${dec} for ${live.length} case${live.length === 1 ? "" : "s"} (${bulk.parts} part number${bulk.parts === 1 ? "" : "s"}) — ${g.cat} · supplier ${g.code}${g.companies[0] ? " " + g.companies[0] : ""} · ref ${bulkId}`, bulkId });
+  evaluateAndAutoJudge(); save();
+  const want = dec === "OK" ? "FINAL_OK" : "FINAL_NG";
+  const wrong = live.filter((m) => !S.approvals[m.key] || S.approvals[m.key].newStatus !== want);
+  return { n: live.length, parts: bulk.parts, wrong: wrong.length, bulkId };
+}
+/** Take back a group judgment: only cases that were judged together in this group are re-opened. */
+function reopenGroupJudgment(g) {
+  const hits = g.final.filter((i) => finalOf(i).bulk && finalOf(i).bulk.supplierCode === g.code && finalOf(i).bulk.errorCategory === g.cat);
+  if (!hits.length) return 0;
+  const by = user();
+  for (const it of hits) {
+    S.audit.push({ at: new Date().toISOString(), ...by, action: "REOPEN", recordKey: it.key, part: it.record.deliveryPartNo, previous: S.approvals[it.key], detail: `group judgment ${finalOf(it).bulk.id} taken back` });
+    delete S.approvals[it.key];
+  }
+  evaluateAndAutoJudge(); save();
+  return hits.length;
+}
+/** Jump to the Judgment Workspace in grouped mode, optionally only for some suppliers. */
+function openGroupJudgment(codes) {
+  Object.assign(UI, { view: "register", grouped: true, groupSup: codes && codes.length ? codes.map(supNorm) : null, sel: null, status: "", route: "", cat: "All", q: "", pendingOnly: false });
+  render(); window.scrollTo(0, 0);
 }
 
 
